@@ -1,0 +1,85 @@
+backend:
+  name: github
+  repo: DEIN-GITHUB-USERNAME/jugendensemble-wsp
+  branch: main
+  auth_type: pkce
+  app_id: DEINE-OAUTH-APP-CLIENT-ID
+
+# ─────────────────────────────────────────────────
+# SETUP ANLEITUNG:
+# 1. Ersetze DEIN-GITHUB-USERNAME mit deinem GitHub-Benutzernamen
+#    Beispiel: repo: jakob123/jugendensemble-wsp
+#
+# 2. Geh auf github.com → Settings → Developer settings
+#    → OAuth Apps → New OAuth App
+#    Homepage URL: https://wsp-8b8.pages.dev
+#    Callback URL: https://wsp-8b8.pages.dev/admin
+#    → Client ID kopieren und hier einfügen
+# ─────────────────────────────────────────────────
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+locale: de
+
+collections:
+  - name: "veranstaltungen"
+    label: "🎭 Veranstaltungen"
+    files:
+      - label: "Alle Veranstaltungen"
+        name: "events"
+        file: "content/events.json"
+        format: "json"
+        fields:
+          - label: "Veranstaltungen"
+            name: "events"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.date}}"
+            fields:
+              - {label: "Titel", name: "title", widget: "string"}
+              - {label: "Untertitel", name: "subtitle", widget: "string", required: false}
+              - {label: "Datum", name: "date", widget: "string"}
+              - {label: "Uhrzeit", name: "time", widget: "string", required: false}
+              - {label: "Einlass ab", name: "doors", widget: "string", required: false}
+              - {label: "Dauer", name: "duration", widget: "string", required: false}
+              - {label: "Veranstaltungsort", name: "venue", widget: "string"}
+              - {label: "Adresse", name: "address", widget: "string", required: false}
+              - {label: "Beschreibung", name: "description", widget: "text", required: false}
+              - {label: "Kapazität", name: "capacity", widget: "number", default: 80}
+              - {label: "Bereits reserviert", name: "reserved", widget: "number", default: 0}
+              - {label: "Warteliste?", name: "waitlist", widget: "boolean", default: true}
+              - {label: "Poster / Bild", name: "image", widget: "image", required: false}
+              - {label: "Vergangen?", name: "past", widget: "boolean", default: false}
+
+  - name: "seiten"
+    label: "📝 Seiteninhalte"
+    files:
+      - label: "Startseite"
+        name: "home"
+        file: "content/home.json"
+        format: "json"
+        fields:
+          - {label: "Hero Bild", name: "hero_image", widget: "image"}
+          - {label: "Untertitel im Hero", name: "hero_subtitle", widget: "string"}
+          - {label: "Einleitungstext", name: "intro_text", widget: "text"}
+          - {label: "Zitat", name: "quote", widget: "string", required: false}
+      - label: "Über uns"
+        name: "about"
+        file: "content/about.json"
+        format: "json"
+        fields:
+          - {label: "Text", name: "body", widget: "text"}
+
+  - name: "einstellungen"
+    label: "⚙️ Einstellungen"
+    files:
+      - label: "Einstellungen"
+        name: "settings"
+        file: "content/settings.json"
+        format: "json"
+        fields:
+          - {label: "E-Mail", name: "email", widget: "string"}
+          - {label: "Instagram", name: "instagram", widget: "string", required: false}
+          - {label: "Formspree ID", name: "formspree_id", widget: "string"}
+          - {label: "EmailJS Service ID", name: "emailjs_service_id", widget: "string", required: false}
+          - {label: "EmailJS Template ID", name: "emailjs_template_id", widget: "string", required: false}
+          - {label: "EmailJS Public Key", name: "emailjs_public_key", widget: "string", required: false}

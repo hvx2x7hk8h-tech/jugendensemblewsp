@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jugendensemble WSP — Theater aus Leidenschaft</title>
+  <meta name="description" content="Das Jugendensemble WSP ist ein freies Theaterprojekt von Jugendlichen für Jugendliche aus Bonn.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="/images/logo.png" alt="Jugendensemble WSP" class="nav-logo-img"></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Start</a></li>
+    <li><a href="about.html">Über uns</a></li>
+    <li><a href="events.html">Vorstellungen</a></li>
+    <li><a href="contact.html">Kontakt</a></li>
+  </ul>
+  <button class="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Start</a>
+  <a href="about.html">Über uns</a>
+  <a href="events.html">Vorstellungen</a>
+  <a href="contact.html">Kontakt</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">✨ Bonn & Umgebung</span>
+    <h1>Jugendensemble WSP</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub" id="hero-subtitle">Ein freies Theaterprojekt von Jugendlichen für Jugendliche.</p>
+    <div class="hero-actions">
+      <a href="events.html" class="btn btn-primary">🎭 Zu den Tickets</a>
+      <a href="about.html" class="btn">Wer sind wir?</a>
+    </div>
+  </div>
+  <div class="scroll-line"><span>Scroll</span></div>
+</section>
+
+<!-- INTRO -->
+<div class="section">
+  <div class="reveal">
+    <span class="section-label">👋 Wer wir sind</span>
+    <h2>Theater mit Herz,<br>Witz & Herzblut</h2>
+    <div class="divider"></div>
+    <p id="intro-text" style="max-width:580px;font-size:1.05rem"></p>
+    <a href="about.html" class="btn" style="margin-top:1.8rem">Mehr über uns</a>
+  </div>
+</div>
+
+<!-- UPCOMING EVENTS -->
+<div class="section-dark">
+  <div class="section-inner">
+    <div class="reveal" style="margin-bottom:2.5rem">
+      <span class="section-label">🎟️ Spielplan</span>
+      <h2>Nächste Vorstellungen</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="events-list" id="events-home"></div>
+    <div style="margin-top:2rem;text-align:center" class="reveal">
+      <a href="events.html" class="btn btn-primary">Alle Vorstellungen & Tickets</a>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div style="padding:6rem 4rem;text-align:center;background:var(--bg)">
+  <blockquote class="reveal" id="home-quote"
+    style="font-family:var(--font-display);font-size:clamp(1.2rem,3vw,2rem);font-weight:400;color:var(--text-muted);max-width:750px;margin:0 auto;line-height:1.7">
+  </blockquote>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Jugendensemble WSP</a>
+    <ul class="footer-links">
+      <li><a href="about.html">Über uns</a></li>
+      <li><a href="events.html">Vorstellungen</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+      <li><a href="impressum.html">Impressum</a></li>
+      <li><a href="datenschutz.html">Datenschutz</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; <span id="year"></span> Jugendensemble WSP</span>
+    <span class="footer-copy">Bonn, Deutschland 🎭</span>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  (async () => {
+    const home = await loadJSON('/content/home.json');
+    if (home) {
+      const img = home.hero_image || 'https://static.wixstatic.com/media/511c42_025226b9919d4c0281caa5309b7d210c~mv2.jpeg';
+      document.getElementById('hero-bg').style.backgroundImage = `url('${img}')`;
+      if (home.hero_subtitle) document.getElementById('hero-subtitle').textContent = home.hero_subtitle;
+      if (home.intro_text)   document.getElementById('intro-text').textContent   = home.intro_text;
+      if (home.quote)        document.getElementById('home-quote').textContent    = '„' + home.quote + '"';
+    }
+    renderEvents('events-home', false);
+  })();
+</script>
+</body>
+</html>

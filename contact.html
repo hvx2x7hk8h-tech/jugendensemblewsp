@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt — Jugendensemble WSP</title>
+  <meta name="description" content="Nimm Kontakt mit dem Jugendensemble WSP auf.">
+  <link rel="stylesheet" href="style.css">
+  </head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="/images/logo.png" alt="Jugendensemble WSP" class="nav-logo-img"></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Start</a></li>
+    <li><a href="about.html">Über uns</a></li>
+    <li><a href="events.html">Veranstaltungen</a></li>
+    <li><a href="contact.html" class="active">Kontakt</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Start</a>
+  <a href="about.html">Über uns</a>
+  <a href="events.html">Veranstaltungen</a>
+  <a href="contact.html">Kontakt</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1>Kontakt</h1>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="section">
+  <div class="contact-grid">
+
+    <!-- LEFT -->
+    <div class="reveal">
+      <span class="section-label">Schreib uns</span>
+      <h2>Lass von<br>dir hören.</h2>
+      <div class="divider"></div>
+      <p>Hast du Fragen zu unseren Vorstellungen, Tickets oder möchtest du einfach Hallo sagen? Wir freuen uns über jede Nachricht.</p>
+      <div style="margin-top:2.5rem;display:flex;flex-direction:column;gap:1.5rem">
+        <div>
+          <div style="font-family:var(--font-display);font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">E-Mail</div>
+          <a id="contact-email" href="#" style="color:var(--text);text-decoration:none;font-weight:300;font-size:0.9rem">jugendensemblewsp@gmail.com</a>
+        </div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">Instagram</div>
+          <a id="contact-instagram" href="https://www.instagram.com/jugendensemble_wsp/" target="_blank" rel="noopener" style="color:var(--text);text-decoration:none;font-weight:300;font-size:0.9rem">@jugendensemble_wsp</a>
+        </div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">Ort</div>
+          <span style="color:var(--text-muted);font-weight:300;font-size:0.9rem">Bonn, Nordrhein-Westfalen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="reveal">
+      <div id="form-wrapper">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Dein Name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">E-Mail</label>
+            <input type="email" id="email" name="email" placeholder="deine@email.de" required>
+          </div>
+          <div class="form-group full">
+            <label for="subject">Betreff</label>
+            <input type="text" id="subject" name="subject" placeholder="Worum geht es?">
+          </div>
+          <div class="form-group full">
+            <label for="message">Nachricht</label>
+            <textarea id="message" name="message" placeholder="Deine Nachricht …" required></textarea>
+          </div>
+          <div class="form-group full">
+            <button class="btn btn-primary" id="send-btn" onclick="sendMessage()" type="button">Nachricht senden</button>
+            <p class="form-note">Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz.html">Datenschutzerklärung</a> zu.</p>
+          </div>
+        </div>
+      </div>
+      <div id="form-success" style="display:none;padding:3rem;border:1px solid var(--border);text-align:center">
+        <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--gold);margin-bottom:1rem">Danke!</div>
+        <p>Deine Nachricht wurde gesendet. Wir melden uns so bald wie möglich.</p>
+      </div>
+      <div id="form-error" style="display:none;padding:1rem;border:1px solid rgba(255,80,80,0.3);margin-top:1rem;color:#ff6b6b;font-size:0.85rem">
+        Nachricht konnte nicht gesendet werden. Bitte schreib uns direkt per E-Mail.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Jugendensemble WSP</a>
+    <ul class="footer-links">
+      <li><a href="about.html">Über uns</a></li>
+      <li><a href="events.html">Veranstaltungen</a></li>
+      <li><a href="contact.html">Kontakt</a></li>
+      <li><a href="impressum.html">Impressum</a></li>
+      <li><a href="datenschutz.html">Datenschutz</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; <span id="year"></span> Jugendensemble WSP — Alle Rechte vorbehalten.</span>
+    <span class="footer-copy">Bonn, Deutschland 🎭</span>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  let formspreeId = 'DEINE_FORMSPREE_ID';
+
+  (async () => {
+    const settings = await loadJSON('/content/settings.json');
+    if (settings) {
+      if (settings.email) {
+        const emailEl = document.getElementById('contact-email');
+        emailEl.href = 'mailto:' + settings.email;
+        emailEl.textContent = settings.email;
+      }
+      if (settings.instagram) {
+        const igEl = document.getElementById('contact-instagram');
+        igEl.href = settings.instagram;
+      }
+      if (settings.formspree_id && settings.formspree_id !== 'DEINE_FORMSPREE_ID') {
+        formspreeId = settings.formspree_id;
+      }
+    }
+  })();
+
+  async function sendMessage() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !email || !message) {
+      alert('Bitte fülle alle Pflichtfelder aus.');
+      return;
+    }
+
+    const btn = document.getElementById('send-btn');
+    btn.textContent = 'Wird gesendet …';
+    btn.disabled = true;
+
+    if (formspreeId === 'DEINE_FORMSPREE_ID') {
+      // Fallback: open mailto
+      window.location.href = `mailto:jugendensemblewsp@gmail.com?subject=${encodeURIComponent(subject || 'Kontaktanfrage')}&body=${encodeURIComponent('Von: ' + name + '\n' + message)}`;
+      btn.textContent = 'Nachricht senden';
+      btn.disabled = false;
+      return;
+    }
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message })
+      });
+      if (res.ok) {
+        document.getElementById('form-wrapper').style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      document.getElementById('form-error').style.display = 'block';
+      btn.textContent = 'Nachricht senden';
+      btn.disabled = false;
+    }
+  }
+
+  (async () => {
+    const _home = await loadJSON('/content/home.json');
+    const _img = _home?.hero_image || 'https://static.wixstatic.com/media/511c42_025226b9919d4c0281caa5309b7d210c~mv2.jpeg';
+    document.querySelectorAll('.hero-bg, .page-hero-bg').forEach(el => {
+      el.style.backgroundImage = `url('${_img}')`;
+    });
+  })();
+</script>
+</body>
+</html>

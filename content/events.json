@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "title": "Känguru Chroniken",
+      "subtitle": "Eine Komödie nach Marc-Uwe Kling",
+      "date": "Mi., 18. März 2026",
+      "time": "19:30 Uhr",
+      "doors": "19:00 Uhr",
+      "venue": "Theater Bonn – Opernhaus",
+      "address": "Am Boeselagerhof 1, 53111 Bonn",
+      "duration": "ca. 90 Minuten",
+      "description": "Ein anarchistisches Känguru zieht zu Marc-Uwe – und das Leben wird nie wieder dasselbe. Humor, Herz und jede Menge Chaos.",
+      "capacity": 80,
+      "reserved": 67,
+      "image": "https://static.wixstatic.com/media/511c42_03e54940eec948628346631343499d5f~mv2.png",
+      "waitlist": true,
+      "past": true
+    }
+  ]
+}
