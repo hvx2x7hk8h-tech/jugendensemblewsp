@@ -1,9 +1,9 @@
 backend:
   name: github
-  repo: DEIN-GITHUB-USERNAME/jugendensemble-wsp
+  repo: hvx2x7hk8h-tech/jugendensemblewsp
   branch: main
   auth_type: pkce
-  app_id: DEINE-OAUTH-APP-CLIENT-ID
+  app_id: 0v23li8YBoEWsu7suffa
 
 # ─────────────────────────────────────────────────
 # SETUP ANLEITUNG:
