@@ -5,25 +5,13 @@ backend:
   auth_type: pkce
   app_id: Ov23li8YBoEWsu7suffa
 
-# ─────────────────────────────────────────────────
-# SETUP ANLEITUNG:
-# 1. Ersetze DEIN-GITHUB-USERNAME mit deinem GitHub-Benutzernamen
-#    Beispiel: repo: jakob123/jugendensemble-wsp
-#
-# 2. Geh auf github.com → Settings → Developer settings
-#    → OAuth Apps → New OAuth App
-#    Homepage URL: https://wsp-8b8.pages.dev
-#    Callback URL: https://wsp-8b8.pages.dev/admin
-#    → Client ID kopieren und hier einfügen
-# ─────────────────────────────────────────────────
-
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 locale: de
 
 collections:
   - name: "veranstaltungen"
-    label: "🎭 Veranstaltungen"
+    label: "Veranstaltungen"
     files:
       - label: "Alle Veranstaltungen"
         name: "events"
@@ -51,7 +39,7 @@ collections:
               - {label: "Vergangen?", name: "past", widget: "boolean", default: false}
 
   - name: "seiten"
-    label: "📝 Seiteninhalte"
+    label: "Seiteninhalte"
     files:
       - label: "Startseite"
         name: "home"
@@ -70,7 +58,7 @@ collections:
           - {label: "Text", name: "body", widget: "text"}
 
   - name: "einstellungen"
-    label: "⚙️ Einstellungen"
+    label: "Einstellungen"
     files:
       - label: "Einstellungen"
         name: "settings"

@@ -1,976 +1,976 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vorstellungen & Tickets — Jugendensemble WSP</title>
-  <meta name="description" content="Alle Vorstellungen des Jugendensemble WSP. Kostenlose Tickets direkt reservieren.">
-  <link rel="stylesheet" href="style.css">
-  <style>
-  /* ════════════════════════════════════════
-     SHOW CARDS
-  ════════════════════════════════════════ */
-  .shows-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Vorstellungen & Tickets — Jugendensemble WSP</title>
+ <meta name="description" content="Alle Vorstellungen des Jugendensemble WSP. Kostenlose Tickets direkt reservieren.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+ /* 
+ SHOW CARDS
+ */
+ .shows-grid {
+ display: flex;
+ flex-direction: column;
+ gap: 1.5rem;
+ }
 
-  .show-card {
-    display: grid;
-    grid-template-columns: 130px 1fr auto;
-    gap: 0;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    position: relative;
-    overflow: hidden;
-    transition: border-color .3s, transform .3s;
-    cursor: pointer;
-  }
-  .show-card:hover { border-color: rgba(201,168,76,.5); transform: translateY(-2px); }
-  .show-card.past { opacity: .45; cursor: default; pointer-events: none; }
-  .show-card::after {
-    content: '';
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
-    background: var(--gold);
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform .3s;
-  }
-  .show-card:hover::after { transform: scaleY(1); }
+ .show-card {
+ display: grid;
+ grid-template-columns: 130px 1fr auto;
+ gap: 0;
+ border: 1px solid var(--border);
+ background: var(--surface-2);
+ position: relative;
+ overflow: hidden;
+ transition: border-color .3s, transform .3s;
+ cursor: pointer;
+ }
+ .show-card:hover { border-color: rgba(201,168,76,.5); transform: translateY(-2px); }
+ .show-card.past { opacity: .45; cursor: default; pointer-events: none; }
+ .show-card::after {
+ content: '';
+ position: absolute;
+ inset: 0 auto 0 0;
+ width: 3px;
+ background: var(--gold);
+ transform: scaleY(0);
+ transform-origin: bottom;
+ transition: transform .3s;
+ }
+ .show-card:hover::after { transform: scaleY(1); }
 
-  .show-poster {
-    width: 130px;
-    min-height: 170px;
-    object-fit: cover;
-    display: block;
-    flex-shrink: 0;
-  }
-  .show-poster-ph {
-    width: 130px;
-    min-height: 170px;
-    background: var(--surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    flex-shrink: 0;
-  }
+ .show-poster {
+ width: 130px;
+ min-height: 170px;
+ object-fit: cover;
+ display: block;
+ flex-shrink: 0;
+ }
+ .show-poster-ph {
+ width: 130px;
+ min-height: 170px;
+ background: var(--surface);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 2.5rem;
+ flex-shrink: 0;
+ }
 
-  .show-body {
-    padding: 1.8rem 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: .5rem;
-  }
-  .show-eyebrow {
-    font-family: var(--font-display);
-    font-size: .52rem;
-    letter-spacing: .4em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-  .show-name {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 500;
-    color: var(--text);
-    line-height: 1.2;
-  }
-  .show-sub {
-    font-size: .82rem;
-    color: var(--text-muted);
-    font-weight: 300;
-    font-style: italic;
-  }
-  .show-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.2rem;
-    margin-top: .4rem;
-  }
-  .show-meta-item {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-    font-size: .8rem;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
-  .show-meta-item .mi { color: var(--gold); font-size: .75rem; }
+ .show-body {
+ padding: 1.8rem 2rem;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ gap: .5rem;
+ }
+ .show-eyebrow {
+ font-family: var(--font-display);
+ font-size: .52rem;
+ letter-spacing: .4em;
+ text-transform: uppercase;
+ color: var(--gold);
+ }
+ .show-name {
+ font-family: var(--font-display);
+ font-size: 1.35rem;
+ font-weight: 500;
+ color: var(--text);
+ line-height: 1.2;
+ }
+ .show-sub {
+ font-size: .82rem;
+ color: var(--text-muted);
+ font-weight: 300;
+ font-style: italic;
+ }
+ .show-meta {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 1.2rem;
+ margin-top: .4rem;
+ }
+ .show-meta-item {
+ display: flex;
+ align-items: center;
+ gap: .4rem;
+ font-size: .8rem;
+ color: var(--text-muted);
+ font-weight: 300;
+ }
+ .show-meta-item .mi { color: var(--gold); font-size: .75rem; }
 
-  /* Availability bar */
-  .avail-wrap { margin-top: .8rem; }
-  .avail-label {
-    font-family: var(--font-display);
-    font-size: .5rem;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: .35rem;
-  }
-  .avail-bar {
-    height: 2px;
-    background: rgba(255,255,255,.08);
-    position: relative;
-    max-width: 300px;
-  }
-  .avail-fill {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    background: var(--gold);
-    transition: width .8s ease;
-  }
-  .avail-fill.low { background: #e08c4c; }
-  .avail-fill.full { background: #e05555; }
+ /* Availability bar */
+ .avail-wrap { margin-top: .8rem; }
+ .avail-label {
+ font-family: var(--font-display);
+ font-size: .5rem;
+ letter-spacing: .2em;
+ text-transform: uppercase;
+ color: var(--text-muted);
+ display: flex;
+ justify-content: space-between;
+ margin-bottom: .35rem;
+ }
+ .avail-bar {
+ height: 2px;
+ background: rgba(255,255,255,.08);
+ position: relative;
+ max-width: 300px;
+ }
+ .avail-fill {
+ position: absolute;
+ left: 0; top: 0; bottom: 0;
+ background: var(--gold);
+ transition: width .8s ease;
+ }
+ .avail-fill.low { background: #e08c4c; }
+ .avail-fill.full { background: #e05555; }
 
-  .show-cta {
-    padding: 1.8rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    gap: .8rem;
-    border-left: 1px solid var(--border);
-    min-width: 160px;
-  }
-  .show-price {
-    font-family: var(--font-display);
-    font-size: .58rem;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-align: right;
-  }
-  .btn-book {
-    padding: .8rem 1.6rem;
-    font-family: var(--font-display);
-    font-size: .58rem;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    background: var(--gold);
-    color: var(--bg);
-    border: none;
-    cursor: pointer;
-    transition: background .3s;
-    white-space: nowrap;
-    width: 100%;
-  }
-  .btn-book:hover { background: var(--gold-light); }
-  .btn-waitlist {
-    padding: .8rem 1.6rem;
-    font-family: var(--font-display);
-    font-size: .58rem;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    background: none;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all .3s;
-    white-space: nowrap;
-    width: 100%;
-  }
-  .btn-waitlist:hover { border-color: var(--gold); color: var(--gold); }
-  .past-badge {
-    font-family: var(--font-display);
-    font-size: .5rem;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border: 1px solid rgba(136,136,136,.25);
-    padding: .3rem .7rem;
-  }
+ .show-cta {
+ padding: 1.8rem 2rem;
+ display: flex;
+ flex-direction: column;
+ align-items: flex-end;
+ justify-content: center;
+ gap: .8rem;
+ border-left: 1px solid var(--border);
+ min-width: 160px;
+ }
+ .show-price {
+ font-family: var(--font-display);
+ font-size: .58rem;
+ letter-spacing: .18em;
+ text-transform: uppercase;
+ color: var(--gold);
+ text-align: right;
+ }
+ .btn-book {
+ padding: .8rem 1.6rem;
+ font-family: var(--font-display);
+ font-size: .58rem;
+ letter-spacing: .18em;
+ text-transform: uppercase;
+ background: var(--gold);
+ color: var(--bg);
+ border: none;
+ cursor: pointer;
+ transition: background .3s;
+ white-space: nowrap;
+ width: 100%;
+ }
+ .btn-book:hover { background: var(--gold-light); }
+ .btn-waitlist {
+ padding: .8rem 1.6rem;
+ font-family: var(--font-display);
+ font-size: .58rem;
+ letter-spacing: .18em;
+ text-transform: uppercase;
+ background: none;
+ color: var(--text-muted);
+ border: 1px solid var(--border);
+ cursor: pointer;
+ transition: all .3s;
+ white-space: nowrap;
+ width: 100%;
+ }
+ .btn-waitlist:hover { border-color: var(--gold); color: var(--gold); }
+ .past-badge {
+ font-family: var(--font-display);
+ font-size: .5rem;
+ letter-spacing: .18em;
+ text-transform: uppercase;
+ color: var(--text-muted);
+ border: 1px solid rgba(136,136,136,.25);
+ padding: .3rem .7rem;
+ }
 
-  /* ════════════════════════════════════════
-     MODAL
-  ════════════════════════════════════════ */
-  #modal {
-    position: fixed; inset: 0; z-index: 600;
-    display: none; align-items: center; justify-content: center;
-    padding: 1rem;
-  }
-  #modal.open { display: flex; }
-  .modal-bg {
-    position: absolute; inset: 0;
-    background: rgba(0,0,0,.92);
-    backdrop-filter: blur(10px);
-    cursor: pointer;
-  }
-  .modal-box {
-    position: relative; z-index: 2;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    width: 100%; max-width: 600px;
-    max-height: 92vh;
-    display: flex; flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,.6);
-  }
-  .modal-box::before {
-    content: '';
-    display: block; height: 2px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
-    flex-shrink: 0;
-  }
+ /* 
+ MODAL
+ */
+ #modal {
+ position: fixed; inset: 0; z-index: 600;
+ display: none; align-items: center; justify-content: center;
+ padding: 1rem;
+ }
+ #modal.open { display: flex; }
+ .modal-bg {
+ position: absolute; inset: 0;
+ background: rgba(0,0,0,.92);
+ backdrop-filter: blur(10px);
+ cursor: pointer;
+ }
+ .modal-box {
+ position: relative; z-index: 2;
+ background: var(--surface);
+ border: 1px solid var(--border);
+ width: 100%; max-width: 600px;
+ max-height: 92vh;
+ display: flex; flex-direction: column;
+ overflow: hidden;
+ box-shadow: 0 40px 80px rgba(0,0,0,.6);
+ }
+ .modal-box::before {
+ content: '';
+ display: block; height: 2px;
+ background: linear-gradient(to right, transparent, var(--gold), transparent);
+ flex-shrink: 0;
+ }
 
-  /* Steps indicator */
-  .steps-bar {
-    display: flex;
-    align-items: center;
-    padding: 1.2rem 2rem;
-    border-bottom: 1px solid var(--border);
-    gap: 0;
-    flex-shrink: 0;
-  }
-  .step-dot {
-    display: flex; align-items: center; gap: .5rem;
-    font-family: var(--font-display);
-    font-size: .5rem; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--text-muted);
-  }
-  .step-dot .num {
-    width: 22px; height: 22px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: .6rem;
-    transition: all .3s;
-  }
-  .step-dot.on .num { background: var(--gold); border-color: var(--gold); color: var(--bg); }
-  .step-dot.done .num { background: transparent; border-color: var(--gold); color: var(--gold); }
-  .step-dot.done .num::after { content: '✓'; }
-  .step-dot.done .num span { display: none; }
-  .step-dot.on { color: var(--text); }
-  .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 .8rem; }
+ /* Steps indicator */
+ .steps-bar {
+ display: flex;
+ align-items: center;
+ padding: 1.2rem 2rem;
+ border-bottom: 1px solid var(--border);
+ gap: 0;
+ flex-shrink: 0;
+ }
+ .step-dot {
+ display: flex; align-items: center; gap: .5rem;
+ font-family: var(--font-display);
+ font-size: .5rem; letter-spacing: .18em;
+ text-transform: uppercase; color: var(--text-muted);
+ }
+ .step-dot .num {
+ width: 22px; height: 22px;
+ border: 1px solid var(--border);
+ border-radius: 50%;
+ display: flex; align-items: center; justify-content: center;
+ font-size: .6rem;
+ transition: all .3s;
+ }
+ .step-dot.on .num { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+ .step-dot.done .num { background: transparent; border-color: var(--gold); color: var(--gold); }
+ .step-dot.done .num::after { content: ''; }
+ .step-dot.done .num span { display: none; }
+ .step-dot.on { color: var(--text); }
+ .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 .8rem; }
 
-  /* Modal header */
-  .modal-head {
-    padding: 1.5rem 2rem 1.2rem;
-    flex-shrink: 0;
-  }
-  .modal-show-title {
-    font-family: var(--font-display);
-    font-size: 1.1rem; color: var(--text);
-    margin-bottom: .3rem;
-  }
-  .modal-show-meta {
-    font-size: .8rem; color: var(--text-muted);
-    font-weight: 300; display: flex; gap: 1rem; flex-wrap: wrap;
-  }
+ /* Modal header */
+ .modal-head {
+ padding: 1.5rem 2rem 1.2rem;
+ flex-shrink: 0;
+ }
+ .modal-show-title {
+ font-family: var(--font-display);
+ font-size: 1.1rem; color: var(--text);
+ margin-bottom: .3rem;
+ }
+ .modal-show-meta {
+ font-size: .8rem; color: var(--text-muted);
+ font-weight: 300; display: flex; gap: 1rem; flex-wrap: wrap;
+ }
 
-  /* Steps content */
-  .modal-body { flex: 1; overflow-y: auto; }
-  .step-pane { display: none; padding: 1.5rem 2rem 2rem; }
-  .step-pane.active { display: block; }
+ /* Steps content */
+ .modal-body { flex: 1; overflow-y: auto; }
+ .step-pane { display: none; padding: 1.5rem 2rem 2rem; }
+ .step-pane.active { display: block; }
 
-  /* Form fields */
-  .f-group { margin-bottom: 1.2rem; }
-  .f-group label {
-    display: block;
-    font-family: var(--font-display); font-size: .5rem;
-    letter-spacing: .2em; text-transform: uppercase;
-    color: var(--text-muted); margin-bottom: .4rem;
-  }
-  .f-group input, .f-group select {
-    width: 100%; background: var(--surface-2);
-    border: 1px solid var(--border);
-    padding: .75rem 1rem; color: var(--text);
-    font-family: var(--font-body); font-size: .88rem;
-    font-weight: 300; outline: none;
-    transition: border-color .25s; -webkit-appearance: none;
-  }
-  .f-group input:focus, .f-group select:focus { border-color: var(--gold); }
-  .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .f-row .f-group { margin-bottom: 0; }
+ /* Form fields */
+ .f-group { margin-bottom: 1.2rem; }
+ .f-group label {
+ display: block;
+ font-family: var(--font-display); font-size: .5rem;
+ letter-spacing: .2em; text-transform: uppercase;
+ color: var(--text-muted); margin-bottom: .4rem;
+ }
+ .f-group input, .f-group select {
+ width: 100%; background: var(--surface-2);
+ border: 1px solid var(--border);
+ padding: .75rem 1rem; color: var(--text);
+ font-family: var(--font-body); font-size: .88rem;
+ font-weight: 300; outline: none;
+ transition: border-color .25s; -webkit-appearance: none;
+ }
+ .f-group input:focus, .f-group select:focus { border-color: var(--gold); }
+ .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+ .f-row .f-group { margin-bottom: 0; }
 
-  /* Qty selector */
-  .qty-wrap {
-    display: flex; align-items: center; gap: 0;
-    border: 1px solid var(--border); width: fit-content;
-  }
-  .qty-btn {
-    width: 44px; height: 44px;
-    background: var(--surface-2); border: none;
-    color: var(--gold); font-size: 1.2rem;
-    cursor: pointer; transition: background .2s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .qty-btn:hover { background: var(--gold-dim); }
-  .qty-num {
-    width: 60px; height: 44px;
-    background: none; border: none;
-    color: var(--text); font-family: var(--font-display);
-    font-size: 1.1rem; text-align: center; outline: none;
-  }
-  .qty-hint {
-    font-size: .72rem; color: var(--text-muted);
-    font-weight: 300; margin-top: .6rem;
-  }
-  .qty-hint span { color: var(--gold); }
+ /* Qty selector */
+ .qty-wrap {
+ display: flex; align-items: center; gap: 0;
+ border: 1px solid var(--border); width: fit-content;
+ }
+ .qty-btn {
+ width: 44px; height: 44px;
+ background: var(--surface-2); border: none;
+ color: var(--gold); font-size: 1.2rem;
+ cursor: pointer; transition: background .2s;
+ display: flex; align-items: center; justify-content: center;
+ }
+ .qty-btn:hover { background: var(--gold-dim); }
+ .qty-num {
+ width: 60px; height: 44px;
+ background: none; border: none;
+ color: var(--text); font-family: var(--font-display);
+ font-size: 1.1rem; text-align: center; outline: none;
+ }
+ .qty-hint {
+ font-size: .72rem; color: var(--text-muted);
+ font-weight: 300; margin-top: .6rem;
+ }
+ .qty-hint span { color: var(--gold); }
 
-  /* Summary box */
-  .summary-box {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-  }
-  .summary-box::before {
-    content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--gold);
-  }
-  .summary-row {
-    display: flex; justify-content: space-between;
-    padding: .4rem 0;
-    font-size: .83rem;
-    border-bottom: 1px solid rgba(255,255,255,.04);
-  }
-  .summary-row:last-child { border-bottom: none; }
-  .summary-row .key { color: var(--text-muted); font-weight: 300; }
-  .summary-row .val { color: var(--text); font-family: var(--font-display); font-size: .75rem; letter-spacing: .05em; }
+ /* Summary box */
+ .summary-box {
+ background: var(--surface-2);
+ border: 1px solid var(--border);
+ padding: 1.5rem;
+ margin-bottom: 1.5rem;
+ position: relative;
+ }
+ .summary-box::before {
+ content: '';
+ position: absolute; left: 0; top: 0; bottom: 0;
+ width: 2px; background: var(--gold);
+ }
+ .summary-row {
+ display: flex; justify-content: space-between;
+ padding: .4rem 0;
+ font-size: .83rem;
+ border-bottom: 1px solid rgba(255,255,255,.04);
+ }
+ .summary-row:last-child { border-bottom: none; }
+ .summary-row .key { color: var(--text-muted); font-weight: 300; }
+ .summary-row .val { color: var(--text); font-family: var(--font-display); font-size: .75rem; letter-spacing: .05em; }
 
-  /* CTA button */
-  .btn-next, .btn-confirm {
-    width: 100%; padding: .95rem;
-    font-family: var(--font-display); font-size: .62rem;
-    letter-spacing: .22em; text-transform: uppercase;
-    background: var(--gold); color: var(--bg);
-    border: none; cursor: pointer;
-    transition: background .3s; margin-top: 1rem;
-  }
-  .btn-next:hover, .btn-confirm:hover { background: var(--gold-light); }
-  .btn-back {
-    background: none; border: none;
-    color: var(--text-muted); font-family: var(--font-display);
-    font-size: .52rem; letter-spacing: .18em;
-    text-transform: uppercase; cursor: pointer;
-    padding: .5rem 0; display: flex; align-items: center; gap: .4rem;
-    transition: color .2s; margin-bottom: 1rem;
-  }
-  .btn-back:hover { color: var(--gold); }
+ /* CTA button */
+ .btn-next, .btn-confirm {
+ width: 100%; padding: .95rem;
+ font-family: var(--font-display); font-size: .62rem;
+ letter-spacing: .22em; text-transform: uppercase;
+ background: var(--gold); color: var(--bg);
+ border: none; cursor: pointer;
+ transition: background .3s; margin-top: 1rem;
+ }
+ .btn-next:hover, .btn-confirm:hover { background: var(--gold-light); }
+ .btn-back {
+ background: none; border: none;
+ color: var(--text-muted); font-family: var(--font-display);
+ font-size: .52rem; letter-spacing: .18em;
+ text-transform: uppercase; cursor: pointer;
+ padding: .5rem 0; display: flex; align-items: center; gap: .4rem;
+ transition: color .2s; margin-bottom: 1rem;
+ }
+ .btn-back:hover { color: var(--gold); }
 
-  .f-note {
-    font-size: .72rem; color: var(--text-muted);
-    font-weight: 300; margin-top: .8rem; line-height: 1.6;
-  }
-  .f-note a { color: var(--gold); }
+ .f-note {
+ font-size: .72rem; color: var(--text-muted);
+ font-weight: 300; margin-top: .8rem; line-height: 1.6;
+ }
+ .f-note a { color: var(--gold); }
 
-  #form-error {
-    display: none; margin-top: .8rem;
-    padding: .8rem 1rem;
-    border: 1px solid rgba(224,85,85,.4);
-    color: #e05555; font-size: .78rem; font-weight: 300;
-  }
+ #form-error {
+ display: none; margin-top: .8rem;
+ padding: .8rem 1rem;
+ border: 1px solid rgba(224,85,85,.4);
+ color: #e05555; font-size: .78rem; font-weight: 300;
+ }
 
-  /* ════════════════════════════════════════
-     TICKET (Step 3)
-  ════════════════════════════════════════ */
-  .ticket-outer {
-    background: #fff;
-    margin: 1rem 0 1.5rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,.4);
-  }
-  /* Gold top stripe */
-  .ticket-outer::before {
-    content: '';
-    display: block; height: 4px;
-    background: linear-gradient(to right, #c9a84c, #e8d5a3, #c9a84c);
-  }
+ /* 
+ TICKET (Step 3)
+ */
+ .ticket-outer {
+ background: #fff;
+ margin: 1rem 0 1.5rem;
+ position: relative;
+ overflow: hidden;
+ box-shadow: 0 20px 60px rgba(0,0,0,.4);
+ }
+ /* Gold top stripe */
+ .ticket-outer::before {
+ content: '';
+ display: block; height: 4px;
+ background: linear-gradient(to right, #c9a84c, #e8d5a3, #c9a84c);
+ }
 
-  .ticket-inner { padding: 1.8rem 2rem 0; color: #111; }
-  .ticket-brand {
-    font-family: var(--font-display); font-size: .55rem;
-    letter-spacing: .5em; text-transform: uppercase;
-    color: #c9a84c; margin-bottom: .6rem;
-  }
-  .ticket-show {
-    font-family: var(--font-display); font-size: 1.4rem;
-    color: #111; margin-bottom: .3rem; line-height: 1.2;
-  }
-  .ticket-show-sub {
-    font-size: .82rem; color: #666;
-    font-style: italic; margin-bottom: 1.2rem;
-  }
-  .ticket-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: .8rem 2rem; margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px dashed #ddd;
-  }
-  .ticket-field label {
-    font-family: var(--font-display); font-size: .48rem;
-    letter-spacing: .2em; text-transform: uppercase;
-    color: #999; display: block; margin-bottom: .2rem;
-  }
-  .ticket-field span { font-size: .88rem; color: #111; font-weight: 500; }
+ .ticket-inner { padding: 1.8rem 2rem 0; color: #111; }
+ .ticket-brand {
+ font-family: var(--font-display); font-size: .55rem;
+ letter-spacing: .5em; text-transform: uppercase;
+ color: #c9a84c; margin-bottom: .6rem;
+ }
+ .ticket-show {
+ font-family: var(--font-display); font-size: 1.4rem;
+ color: #111; margin-bottom: .3rem; line-height: 1.2;
+ }
+ .ticket-show-sub {
+ font-size: .82rem; color: #666;
+ font-style: italic; margin-bottom: 1.2rem;
+ }
+ .ticket-grid {
+ display: grid; grid-template-columns: 1fr 1fr;
+ gap: .8rem 2rem; margin-bottom: 1.5rem;
+ padding-bottom: 1.5rem;
+ border-bottom: 1px dashed #ddd;
+ }
+ .ticket-field label {
+ font-family: var(--font-display); font-size: .48rem;
+ letter-spacing: .2em; text-transform: uppercase;
+ color: #999; display: block; margin-bottom: .2rem;
+ }
+ .ticket-field span { font-size: .88rem; color: #111; font-weight: 500; }
 
-  /* Tear line */
-  .tear-line {
-    position: relative; margin: 0 -2rem;
-    display: flex; align-items: center;
-  }
-  .tear-circle {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--surface); flex-shrink: 0;
-  }
-  .tear-dash {
-    flex: 1; border-top: 2px dashed #ddd;
-  }
+ /* Tear line */
+ .tear-line {
+ position: relative; margin: 0 -2rem;
+ display: flex; align-items: center;
+ }
+ .tear-circle {
+ width: 28px; height: 28px; border-radius: 50%;
+ background: var(--surface); flex-shrink: 0;
+ }
+ .tear-dash {
+ flex: 1; border-top: 2px dashed #ddd;
+ }
 
-  .ticket-qr-row {
-    display: flex; align-items: center;
-    gap: 1.5rem; padding: 1.2rem 0 1.8rem;
-  }
-  #qr-canvas { flex-shrink: 0; }
-  .ticket-qr-info { flex: 1; }
-  .ticket-id-label {
-    font-family: var(--font-display); font-size: .48rem;
-    letter-spacing: .2em; text-transform: uppercase;
-    color: #999; margin-bottom: .3rem;
-  }
-  .ticket-id-val {
-    font-family: monospace; font-size: .85rem;
-    color: #111; letter-spacing: .05em;
-  }
-  .ticket-id-barcode {
-    display: flex; gap: 2px; margin-top: .8rem; height: 28px;
-    align-items: flex-end;
-  }
-  .ticket-id-barcode span {
-    display: block; background: #111;
-    width: 2px;
-  }
+ .ticket-qr-row {
+ display: flex; align-items: center;
+ gap: 1.5rem; padding: 1.2rem 0 1.8rem;
+ }
+ #qr-canvas { flex-shrink: 0; }
+ .ticket-qr-info { flex: 1; }
+ .ticket-id-label {
+ font-family: var(--font-display); font-size: .48rem;
+ letter-spacing: .2em; text-transform: uppercase;
+ color: #999; margin-bottom: .3rem;
+ }
+ .ticket-id-val {
+ font-family: monospace; font-size: .85rem;
+ color: #111; letter-spacing: .05em;
+ }
+ .ticket-id-barcode {
+ display: flex; gap: 2px; margin-top: .8rem; height: 28px;
+ align-items: flex-end;
+ }
+ .ticket-id-barcode span {
+ display: block; background: #111;
+ width: 2px;
+ }
 
-  /* Ticket actions */
-  .ticket-actions {
-    display: flex; gap: .8rem; margin-top: 1rem;
-  }
-  .btn-print, .btn-close-modal {
-    flex: 1; padding: .75rem;
-    font-family: var(--font-display); font-size: .55rem;
-    letter-spacing: .18em; text-transform: uppercase;
-    cursor: pointer; transition: all .3s; border: none;
-  }
-  .btn-print { background: var(--gold); color: var(--bg); }
-  .btn-print:hover { background: var(--gold-light); }
-  .btn-close-modal { background: none; border: 1px solid var(--border); color: var(--text-muted); }
-  .btn-close-modal:hover { border-color: var(--gold); color: var(--gold); }
+ /* Ticket actions */
+ .ticket-actions {
+ display: flex; gap: .8rem; margin-top: 1rem;
+ }
+ .btn-print, .btn-close-modal {
+ flex: 1; padding: .75rem;
+ font-family: var(--font-display); font-size: .55rem;
+ letter-spacing: .18em; text-transform: uppercase;
+ cursor: pointer; transition: all .3s; border: none;
+ }
+ .btn-print { background: var(--gold); color: var(--bg); }
+ .btn-print:hover { background: var(--gold-light); }
+ .btn-close-modal { background: none; border: 1px solid var(--border); color: var(--text-muted); }
+ .btn-close-modal:hover { border-color: var(--gold); color: var(--gold); }
 
-  /* Confirmation message */
-  .confirm-msg {
-    background: rgba(85,196,122,.08);
-    border: 1px solid rgba(85,196,122,.25);
-    padding: 1rem 1.2rem;
-    font-size: .8rem; color: #55c47a;
-    font-weight: 300; display: flex; gap: .6rem;
-    align-items: flex-start; margin-bottom: 1rem;
-  }
-  .confirm-msg .icon { flex-shrink: 0; margin-top: .05rem; }
+ /* Confirmation message */
+ .confirm-msg {
+ background: rgba(85,196,122,.08);
+ border: 1px solid rgba(85,196,122,.25);
+ padding: 1rem 1.2rem;
+ font-size: .8rem; color: #55c47a;
+ font-weight: 300; display: flex; gap: .6rem;
+ align-items: flex-start; margin-bottom: 1rem;
+ }
+ .confirm-msg .icon { flex-shrink: 0; margin-top: .05rem; }
 
-  /* Waitlist */
-  .waitlist-note {
-    background: rgba(201,168,76,.06);
-    border: 1px solid var(--border);
-    padding: 1.2rem 1.5rem;
-    font-size: .82rem; color: var(--text-muted);
-    font-weight: 300; margin-bottom: 1.5rem;
-  }
-  .waitlist-note strong { color: var(--gold); font-weight: 500; }
+ /* Waitlist */
+ .waitlist-note {
+ background: rgba(201,168,76,.06);
+ border: 1px solid var(--border);
+ padding: 1.2rem 1.5rem;
+ font-size: .82rem; color: var(--text-muted);
+ font-weight: 300; margin-bottom: 1.5rem;
+ }
+ .waitlist-note strong { color: var(--gold); font-weight: 500; }
 
-  /* No shows */
-  .no-shows {
-    text-align: center; padding: 5rem 2rem;
-    border: 1px solid var(--border);
-  }
-  .no-shows .ns-icon { font-size: 2.5rem; margin-bottom: 1.2rem; display: block; }
-  .no-shows p { font-family: var(--font-display); font-size: .7rem; letter-spacing: .1em; color: var(--text-muted); }
+ /* No shows */
+ .no-shows {
+ text-align: center; padding: 5rem 2rem;
+ border: 1px solid var(--border);
+ }
+ .no-shows .ns-icon { font-size: 2.5rem; margin-bottom: 1.2rem; display: block; }
+ .no-shows p { font-family: var(--font-display); font-size: .7rem; letter-spacing: .1em; color: var(--text-muted); }
 
-  /* HOW IT WORKS */
-  .hiw-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 2.5rem;
-  }
-  .hiw-step { display: flex; flex-direction: column; gap: .7rem; }
-  .hiw-num { font-family: var(--font-display); font-size: 2.5rem; color: var(--gold); opacity: .28; line-height: 1; }
-  .hiw-title { font-family: var(--font-display); font-size: .75rem; letter-spacing: .06em; color: var(--text); }
-  .hiw-desc { font-size: .8rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; }
+ /* HOW IT WORKS */
+ .hiw-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+ gap: 2.5rem;
+ }
+ .hiw-step { display: flex; flex-direction: column; gap: .7rem; }
+ .hiw-num { font-family: var(--font-display); font-size: 2.5rem; color: var(--gold); opacity: .28; line-height: 1; }
+ .hiw-title { font-family: var(--font-display); font-size: .75rem; letter-spacing: .06em; color: var(--text); }
+ .hiw-desc { font-size: .8rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; }
 
-  /* RESPONSIVE */
-  @media (max-width: 720px) {
-    .show-card { grid-template-columns: 1fr; }
-    .show-poster, .show-poster-ph { width: 100%; min-height: 180px; }
-    .show-cta { border-left: none; border-top: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; }
-    .btn-book, .btn-waitlist { width: auto; flex: 1; }
-    .f-row { grid-template-columns: 1fr; }
-    .ticket-grid { grid-template-columns: 1fr; }
-    .ticket-qr-row { flex-direction: column; align-items: flex-start; }
-    .steps-bar .step-dot .lbl { display: none; }
-  }
+ /* RESPONSIVE */
+ @media (max-width: 720px) {
+ .show-card { grid-template-columns: 1fr; }
+ .show-poster, .show-poster-ph { width: 100%; min-height: 180px; }
+ .show-cta { border-left: none; border-top: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; }
+ .btn-book, .btn-waitlist { width: auto; flex: 1; }
+ .f-row { grid-template-columns: 1fr; }
+ .ticket-grid { grid-template-columns: 1fr; }
+ .ticket-qr-row { flex-direction: column; align-items: flex-start; }
+ .steps-bar .step-dot .lbl { display: none; }
+ }
 
-  @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .step-pane.active { animation: fadeSlideIn .35s ease; }
+ @keyframes fadeSlideIn {
+ from { opacity: 0; transform: translateY(12px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+ .step-pane.active { animation: fadeSlideIn .35s ease; }
 
-  @media print {
-    nav, .page-hero, #hiw-section, #past-section, footer,
-    .steps-bar, .modal-head, .modal-bg, .btn-next,
-    .btn-back, .btn-close-modal, .summary-box, .f-note,
-    .ticket-actions, .confirm-msg { display: none !important; }
-    #modal { position: static !important; display: block !important; padding: 0 !important; background: #fff !important; }
-    .modal-box { box-shadow: none !important; border: none !important; max-height: none !important; }
-    .step-pane { display: none !important; }
-    #step-3 { display: block !important; padding: 0 !important; }
-    body { background: #fff !important; }
-    .modal-body { overflow: visible !important; }
-    .ticket-outer { box-shadow: none !important; }
-  }
-  </style>
+ @media print {
+ nav, .page-hero, #hiw-section, #past-section, footer,
+ .steps-bar, .modal-head, .modal-bg, .btn-next,
+ .btn-back, .btn-close-modal, .summary-box, .f-note,
+ .ticket-actions, .confirm-msg { display: none !important; }
+ #modal { position: static !important; display: block !important; padding: 0 !important; background: #fff !important; }
+ .modal-box { box-shadow: none !important; border: none !important; max-height: none !important; }
+ .step-pane { display: none !important; }
+ #step-3 { display: block !important; padding: 0 !important; }
+ body { background: #fff !important; }
+ .modal-body { overflow: visible !important; }
+ .ticket-outer { box-shadow: none !important; }
+ }
+ </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo"><img src="/images/logo.png" alt="Jugendensemble WSP" class="nav-logo-img"></a>
-  <ul class="nav-links">
-    <li><a href="index.html">Start</a></li>
-    <li><a href="about.html">Über uns</a></li>
-    <li><a href="events.html" class="active">Vorstellungen</a></li>
-    <li><a href="contact.html">Kontakt</a></li>
-  </ul>
-  <button class="hamburger" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
+ <a href="index.html" class="nav-logo"><img src="/images/logo.png" alt="Jugendensemble WSP" class="nav-logo-img"></a>
+ <ul class="nav-links">
+ <li><a href="index.html">Start</a></li>
+ <li><a href="about.html">Über uns</a></li>
+ <li><a href="events.html" class="active">Vorstellungen</a></li>
+ <li><a href="contact.html">Kontakt</a></li>
+ </ul>
+ <button class="hamburger" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu">
-  <a href="index.html">Start</a>
-  <a href="about.html">Über uns</a>
-  <a href="events.html">Vorstellungen</a>
-  <a href="contact.html">Kontakt</a>
+ <a href="index.html">Start</a>
+ <a href="about.html">Über uns</a>
+ <a href="events.html">Vorstellungen</a>
+ <a href="contact.html">Kontakt</a>
 </div>
 
 <!-- HERO -->
 <div class="page-hero">
-  <div class="page-hero-bg"></div>
-  <div class="page-hero-overlay"></div>
-  <div class="page-hero-content"><h1>Vorstellungen & Tickets</h1></div>
+ <div class="page-hero-bg"></div>
+ <div class="page-hero-overlay"></div>
+ <div class="page-hero-content"><h1>Vorstellungen & Tickets</h1></div>
 </div>
 
 <!-- UPCOMING -->
 <div class="section">
-  <div class="reveal" style="margin-bottom:3rem">
-    <span class="section-label">Spielplan</span>
-    <h2>Kommende Vorstellungen</h2>
-    <div class="divider"></div>
-    <p style="max-width:540px">Wähle deine Vorstellung und reserviere dein kostenloses Ticket in weniger als einer Minute — direkt hier.</p>
-  </div>
-  <div class="shows-grid reveal" id="shows-upcoming"></div>
+ <div class="reveal" style="margin-bottom:3rem">
+ <span class="section-label">Spielplan</span>
+ <h2>Kommende Vorstellungen</h2>
+ <div class="divider"></div>
+ <p style="max-width:540px">Wähle deine Vorstellung und reserviere dein kostenloses Ticket in weniger als einer Minute — direkt hier.</p>
+ </div>
+ <div class="shows-grid reveal" id="shows-upcoming"></div>
 </div>
 
 <!-- HOW IT WORKS -->
 <div class="section-dark" id="hiw-section">
-  <div class="section-inner">
-    <div class="reveal" style="margin-bottom:2.5rem">
-      <span class="section-label">Einfach & kostenlos</span>
-      <h2>In 3 Schritten zum Ticket</h2>
-      <div class="divider"></div>
-    </div>
-    <div class="hiw-grid reveal">
-      <div class="hiw-step">
-        <div class="hiw-num">01</div>
-        <div class="hiw-title">Vorstellung wählen</div>
-        <div class="hiw-desc">Wähle Datum, Uhrzeit und Anzahl der gewünschten Plätze.</div>
-      </div>
-      <div class="hiw-step">
-        <div class="hiw-num">02</div>
-        <div class="hiw-title">Daten eingeben</div>
-        <div class="hiw-desc">Name und E-Mail-Adresse — fertig. Keine Zahlung, keine Kreditkarte.</div>
-      </div>
-      <div class="hiw-step">
-        <div class="hiw-num">03</div>
-        <div class="hiw-title">Ticket erhalten</div>
-        <div class="hiw-desc">Dein persönliches Ticket mit QR-Code erscheint sofort und wird per E-Mail zugeschickt.</div>
-      </div>
-    </div>
-  </div>
+ <div class="section-inner">
+ <div class="reveal" style="margin-bottom:2.5rem">
+ <span class="section-label">Einfach & kostenlos</span>
+ <h2>In 3 Schritten zum Ticket</h2>
+ <div class="divider"></div>
+ </div>
+ <div class="hiw-grid reveal">
+ <div class="hiw-step">
+ <div class="hiw-num">01</div>
+ <div class="hiw-title">Vorstellung wählen</div>
+ <div class="hiw-desc">Wähle Datum, Uhrzeit und Anzahl der gewünschten Plätze.</div>
+ </div>
+ <div class="hiw-step">
+ <div class="hiw-num">02</div>
+ <div class="hiw-title">Daten eingeben</div>
+ <div class="hiw-desc">Name und E-Mail-Adresse — fertig. Keine Zahlung, keine Kreditkarte.</div>
+ </div>
+ <div class="hiw-step">
+ <div class="hiw-num">03</div>
+ <div class="hiw-title">Ticket erhalten</div>
+ <div class="hiw-desc">Dein persönliches Ticket mit QR-Code erscheint sofort und wird per E-Mail zugeschickt.</div>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- PAST -->
 <div class="section" id="past-section">
-  <div class="reveal" style="margin-bottom:2.5rem">
-    <span class="section-label">Archiv</span>
-    <h2>Vergangene Vorstellungen</h2>
-    <div class="divider"></div>
-  </div>
-  <div class="shows-grid reveal" id="shows-past"></div>
+ <div class="reveal" style="margin-bottom:2.5rem">
+ <span class="section-label">Archiv</span>
+ <h2>Vergangene Vorstellungen</h2>
+ <div class="divider"></div>
+ </div>
+ <div class="shows-grid reveal" id="shows-past"></div>
 </div>
 
-<!-- ══ MODAL ══ -->
+<!-- MODAL -->
 <div id="modal" role="dialog" aria-modal="true">
-  <div class="modal-bg" onclick="closeModal()"></div>
-  <div class="modal-box">
-    <div class="modal-box-inner" style="display:flex;flex-direction:column;overflow:hidden;max-height:92vh">
+ <div class="modal-bg" onclick="closeModal()"></div>
+ <div class="modal-box">
+ <div class="modal-box-inner" style="display:flex;flex-direction:column;overflow:hidden;max-height:92vh">
 
-      <!-- Steps bar -->
-      <div class="steps-bar">
-        <div class="step-dot on" id="sdot-1"><div class="num"><span>1</span></div><span class="lbl">Tickets</span></div>
-        <div class="step-line"></div>
-        <div class="step-dot" id="sdot-2"><div class="num"><span>2</span></div><span class="lbl">Daten</span></div>
-        <div class="step-line"></div>
-        <div class="step-dot" id="sdot-3"><div class="num"><span>3</span></div><span class="lbl">Bestätigung</span></div>
-      </div>
+ <!-- Steps bar -->
+ <div class="steps-bar">
+ <div class="step-dot on" id="sdot-1"><div class="num"><span>1</span></div><span class="lbl">Tickets</span></div>
+ <div class="step-line"></div>
+ <div class="step-dot" id="sdot-2"><div class="num"><span>2</span></div><span class="lbl">Daten</span></div>
+ <div class="step-line"></div>
+ <div class="step-dot" id="sdot-3"><div class="num"><span>3</span></div><span class="lbl">Bestätigung</span></div>
+ </div>
 
-      <!-- Show info -->
-      <div class="modal-head">
-        <div class="modal-show-title" id="m-title">—</div>
-        <div class="modal-show-meta" id="m-meta"></div>
-      </div>
+ <!-- Show info -->
+ <div class="modal-head">
+ <div class="modal-show-title" id="m-title">—</div>
+ <div class="modal-show-meta" id="m-meta"></div>
+ </div>
 
-      <!-- Body -->
-      <div class="modal-body">
+ <!-- Body -->
+ <div class="modal-body">
 
-        <!-- STEP 1: Ticket Selection -->
-        <div class="step-pane active" id="step-1">
-          <div class="f-group" style="margin-bottom:2rem">
-            <label>Anzahl der Tickets</label>
-            <div class="qty-wrap">
-              <button class="qty-btn" onclick="changeQty(-1)">−</button>
-              <input class="qty-num" id="qty" type="number" value="1" min="1" max="6" readonly>
-              <button class="qty-btn" onclick="changeQty(1)">+</button>
-            </div>
-            <div class="qty-hint">Max. 6 Tickets pro Reservierung · <span id="spots-left"></span></div>
-          </div>
-          <div id="waitlist-note-1" class="waitlist-note" style="display:none">
-            <strong>Warteliste:</strong> Diese Vorstellung ist ausgebucht. Du kannst dich auf die Warteliste setzen und wirst automatisch benachrichtigt, falls Plätze frei werden.
-          </div>
-          <button class="btn-next" onclick="goStep(2)">Weiter →</button>
-        </div>
+ <!-- STEP 1: Ticket Selection -->
+ <div class="step-pane active" id="step-1">
+ <div class="f-group" style="margin-bottom:2rem">
+ <label>Anzahl der Tickets</label>
+ <div class="qty-wrap">
+ <button class="qty-btn" onclick="changeQty(-1)">−</button>
+ <input class="qty-num" id="qty" type="number" value="1" min="1" max="6" readonly>
+ <button class="qty-btn" onclick="changeQty(1)">+</button>
+ </div>
+ <div class="qty-hint">Max. 6 Tickets pro Reservierung · <span id="spots-left"></span></div>
+ </div>
+ <div id="waitlist-note-1" class="waitlist-note" style="display:none">
+ <strong>Warteliste:</strong> Diese Vorstellung ist ausgebucht. Du kannst dich auf die Warteliste setzen und wirst automatisch benachrichtigt, falls Plätze frei werden.
+ </div>
+ <button class="btn-next" onclick="goStep(2)">Weiter →</button>
+ </div>
 
-        <!-- STEP 2: Personal Data -->
-        <div class="step-pane" id="step-2">
-          <button class="btn-back" onclick="goStep(1)">← Zurück</button>
-          <div class="f-row">
-            <div class="f-group"><label>Vorname *</label><input id="f-first" type="text" placeholder="Max" autocomplete="given-name"></div>
-            <div class="f-group"><label>Nachname *</label><input id="f-last" type="text" placeholder="Mustermann" autocomplete="family-name"></div>
-          </div>
-          <div class="f-group"><label>E-Mail-Adresse *</label><input id="f-email" type="email" placeholder="max@beispiel.de" autocomplete="email"></div>
-          <div class="f-group"><label>Telefon (optional)</label><input id="f-phone" type="tel" placeholder="+49 …" autocomplete="tel"></div>
-          <p class="f-note">Mit der Reservierung stimmst du unserer <a href="datenschutz.html">Datenschutzerklärung</a> zu. Deine Daten werden ausschließlich zur Verwaltung dieser Reservierung verwendet.</p>
-          <div id="form-error"></div>
-          <button class="btn-next" id="confirm-btn" onclick="submitReservation()">Jetzt reservieren ✓</button>
-        </div>
+ <!-- STEP 2: Personal Data -->
+ <div class="step-pane" id="step-2">
+ <button class="btn-back" onclick="goStep(1)">← Zurück</button>
+ <div class="f-row">
+ <div class="f-group"><label>Vorname *</label><input id="f-first" type="text" placeholder="Max" autocomplete="given-name"></div>
+ <div class="f-group"><label>Nachname *</label><input id="f-last" type="text" placeholder="Mustermann" autocomplete="family-name"></div>
+ </div>
+ <div class="f-group"><label>E-Mail-Adresse *</label><input id="f-email" type="email" placeholder="max@beispiel.de" autocomplete="email"></div>
+ <div class="f-group"><label>Telefon (optional)</label><input id="f-phone" type="tel" placeholder="+49 …" autocomplete="tel"></div>
+ <p class="f-note">Mit der Reservierung stimmst du unserer <a href="datenschutz.html">Datenschutzerklärung</a> zu. Deine Daten werden ausschließlich zur Verwaltung dieser Reservierung verwendet.</p>
+ <div id="form-error"></div>
+ <button class="btn-next" id="confirm-btn" onclick="submitReservation()">Jetzt reservieren </button>
+ </div>
 
-        <!-- STEP 3: Ticket -->
-        <div class="step-pane" id="step-3">
-          <div class="confirm-msg">
-            <span class="icon">✓</span>
-            <span>Reservierung bestätigt! Eine Bestätigungs-E-Mail wurde an <strong id="conf-email"></strong> gesendet.</span>
-          </div>
+ <!-- STEP 3: Ticket -->
+ <div class="step-pane" id="step-3">
+ <div class="confirm-msg">
+ <span class="icon"></span>
+ <span>Reservierung bestätigt! Eine Bestätigungs-E-Mail wurde an <strong id="conf-email"></strong> gesendet.</span>
+ </div>
 
-          <!-- THE TICKET -->
-          <div class="ticket-outer">
-            <div class="ticket-inner">
-              <div class="ticket-brand">Jugendensemble WSP · Offizielles Ticket</div>
-              <div class="ticket-show" id="t-show"></div>
-              <div class="ticket-show-sub" id="t-sub"></div>
-              <div class="ticket-grid">
-                <div class="ticket-field"><label>Inhaber</label><span id="t-name"></span></div>
-                <div class="ticket-field"><label>Tickets</label><span id="t-qty"></span></div>
-                <div class="ticket-field"><label>Datum</label><span id="t-date"></span></div>
-                <div class="ticket-field"><label>Einlass</label><span id="t-doors"></span></div>
-                <div class="ticket-field"><label>Veranstaltungsort</label><span id="t-venue"></span></div>
-                <div class="ticket-field"><label>Preis</label><span style="color:#c9a84c">Kostenlos</span></div>
-              </div>
-            </div>
-            <div class="tear-line">
-              <div class="tear-circle"></div>
-              <div class="tear-dash"></div>
-              <div class="tear-circle"></div>
-            </div>
-            <div class="ticket-inner">
-              <div class="ticket-qr-row">
-                <div id="qr-canvas"></div>
-                <div class="ticket-qr-info">
-                  <div class="ticket-id-label">Reservierungs-ID</div>
-                  <div class="ticket-id-val" id="t-id"></div>
-                  <div class="ticket-id-barcode" id="t-barcode"></div>
-                  <div style="font-size:.7rem;color:#999;margin-top:.8rem;font-style:italic">Bitte zeige diesen QR-Code an der Abendkasse vor.</div>
-                </div>
-              </div>
-            </div>
-          </div>
+ <!-- THE TICKET -->
+ <div class="ticket-outer">
+ <div class="ticket-inner">
+ <div class="ticket-brand">Jugendensemble WSP · Offizielles Ticket</div>
+ <div class="ticket-show" id="t-show"></div>
+ <div class="ticket-show-sub" id="t-sub"></div>
+ <div class="ticket-grid">
+ <div class="ticket-field"><label>Inhaber</label><span id="t-name"></span></div>
+ <div class="ticket-field"><label>Tickets</label><span id="t-qty"></span></div>
+ <div class="ticket-field"><label>Datum</label><span id="t-date"></span></div>
+ <div class="ticket-field"><label>Einlass</label><span id="t-doors"></span></div>
+ <div class="ticket-field"><label>Veranstaltungsort</label><span id="t-venue"></span></div>
+ <div class="ticket-field"><label>Preis</label><span style="color:#c9a84c">Kostenlos</span></div>
+ </div>
+ </div>
+ <div class="tear-line">
+ <div class="tear-circle"></div>
+ <div class="tear-dash"></div>
+ <div class="tear-circle"></div>
+ </div>
+ <div class="ticket-inner">
+ <div class="ticket-qr-row">
+ <div id="qr-canvas"></div>
+ <div class="ticket-qr-info">
+ <div class="ticket-id-label">Reservierungs-ID</div>
+ <div class="ticket-id-val" id="t-id"></div>
+ <div class="ticket-id-barcode" id="t-barcode"></div>
+ <div style="font-size:.7rem;color:#999;margin-top:.8rem;font-style:italic">Bitte zeige diesen QR-Code an der Abendkasse vor.</div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-          <div class="ticket-actions">
-            <button class="btn-print" onclick="window.print()">🖨 Ticket drucken / als PDF speichern</button>
-            <button class="btn-close-modal" onclick="closeModal()">Schließen</button>
-          </div>
-        </div>
+ <div class="ticket-actions">
+ <button class="btn-print" onclick="window.print()"> Ticket drucken / als PDF speichern</button>
+ <button class="btn-close-modal" onclick="closeModal()">Schließen</button>
+ </div>
+ </div>
 
-      </div>
-    </div>
-  </div>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <a href="index.html" class="footer-logo">Jugendensemble WSP</a>
-    <ul class="footer-links">
-      <li><a href="about.html">Über uns</a></li>
-      <li><a href="events.html">Vorstellungen</a></li>
-      <li><a href="contact.html">Kontakt</a></li>
-      <li><a href="impressum.html">Impressum</a></li>
-      <li><a href="datenschutz.html">Datenschutz</a></li>
-    </ul>
-  </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">&copy; <span id="year"></span> Jugendensemble WSP — Alle Rechte vorbehalten.</span>
-    <span class="footer-copy">Bonn, Deutschland 🎭</span>
-  </div>
+ <div class="footer-inner">
+ <a href="index.html" class="footer-logo">Jugendensemble WSP</a>
+ <ul class="footer-links">
+ <li><a href="about.html">Über uns</a></li>
+ <li><a href="events.html">Vorstellungen</a></li>
+ <li><a href="contact.html">Kontakt</a></li>
+ <li><a href="impressum.html">Impressum</a></li>
+ <li><a href="datenschutz.html">Datenschutz</a></li>
+ </ul>
+ </div>
+ <div class="footer-bottom">
+ <span class="footer-copy">&copy; <span id="year"></span> Jugendensemble WSP — Alle Rechte vorbehalten.</span>
+ <span class="footer-copy">Bonn, Deutschland </span>
+ </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="main.js"></script>
 <script>
-// ── INIT ──────────────────────────────────────────────
+// INIT 
 document.getElementById('year').textContent = new Date().getFullYear();
 let currentEvent = null, formspreeId = '', isWaitlist = false;
 
 (async () => {
-  const home = await loadJSON('/content/home.json');
-  const img = home?.hero_image || 'https://static.wixstatic.com/media/511c42_025226b9919d4c0281caa5309b7d210c~mv2.jpeg';
-  document.querySelectorAll('.page-hero-bg').forEach(el => el.style.backgroundImage = `url('${img}')`);
+ const home = await loadJSON('/content/home.json');
+ const img = home?.hero_image || 'https://static.wixstatic.com/media/511c42_025226b9919d4c0281caa5309b7d210c~mv2.jpeg';
+ document.querySelectorAll('.page-hero-bg').forEach(el => el.style.backgroundImage = `url('${img}')`);
 
-  const s = await loadJSON('/content/settings.json');
-  if (s?.formspree_id) formspreeId = s.formspree_id;
-  if (s?.emailjs_public_key) {
-    emailjs.init({ publicKey: s.emailjs_public_key });
-    window._ejsSvc = s.emailjs_service_id || '';
-    window._ejsTpl = s.emailjs_template_id || '';
-  }
+ const s = await loadJSON('/content/settings.json');
+ if (s?.formspree_id) formspreeId = s.formspree_id;
+ if (s?.emailjs_public_key) {
+ emailjs.init({ publicKey: s.emailjs_public_key });
+ window._ejsSvc = s.emailjs_service_id || '';
+ window._ejsTpl = s.emailjs_template_id || '';
+ }
 
-  const data = await loadJSON('/content/events.json');
-  if (!data?.events) return;
-  renderShows('shows-upcoming', data.events.filter(e => !e.past));
-  renderShows('shows-past',     data.events.filter(e => e.past));
+ const data = await loadJSON('/content/events.json');
+ if (!data?.events) return;
+ renderShows('shows-upcoming', data.events.filter(e => !e.past));
+ renderShows('shows-past', data.events.filter(e => e.past));
 })();
 
-// ── RENDER ────────────────────────────────────────────
+// RENDER 
 function renderShows(id, events) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (!events.length) {
-    el.innerHTML = `<div class="no-shows"><span class="ns-icon">🎭</span><p>${id.includes('past') ? 'Noch keine vergangenen Vorstellungen.' : 'Aktuell keine Vorstellungen geplant — schau bald wieder vorbei!'}</p></div>`;
-    return;
-  }
-  el.innerHTML = events.map(ev => buildCard(ev)).join('');
-  document.querySelectorAll('.reveal').forEach(e => observer.observe(e));
+ const el = document.getElementById(id);
+ if (!el) return;
+ if (!events.length) {
+ el.innerHTML = `<div class="no-shows"><span class="ns-icon"></span><p>${id.includes('past') ? 'Noch keine vergangenen Vorstellungen.' : 'Aktuell keine Vorstellungen geplant — schau bald wieder vorbei!'}</p></div>`;
+ return;
+ }
+ el.innerHTML = events.map(ev => buildCard(ev)).join('');
+ document.querySelectorAll('.reveal').forEach(e => observer.observe(e));
 }
 
 function buildCard(ev) {
-  const free  = ev.capacity - (ev.reserved || 0);
-  const pct   = Math.min(100, Math.round(((ev.reserved||0) / ev.capacity) * 100));
-  const sold  = free <= 0;
-  const low   = free > 0 && free <= 10;
-  const fillCls = sold ? 'full' : low ? 'low' : '';
-  const availTxt = sold ? 'Ausgebucht' : low ? `Nur noch ${free} Plätze` : `${free} Plätze verfügbar`;
+ const free = ev.capacity - (ev.reserved || 0);
+ const pct = Math.min(100, Math.round(((ev.reserved||0) / ev.capacity) * 100));
+ const sold = free <= 0;
+ const low = free > 0 && free <= 10;
+ const fillCls = sold ? 'full' : low ? 'low' : '';
+ const availTxt = sold ? 'Ausgebucht' : low ? `Nur noch ${free} Plätze` : `${free} Plätze verfügbar`;
 
-  const poster = ev.image
-    ? `<img class="show-poster" src="${ev.image}" alt="${ev.title}" loading="lazy">`
-    : `<div class="show-poster-ph">🎭</div>`;
+ const poster = ev.image
+ ? `<img class="show-poster" src="${ev.image}" alt="${ev.title}" loading="lazy">`
+ : `<div class="show-poster-ph"></div>`;
 
-  const avail = !ev.past ? `
-    <div class="avail-wrap">
-      <div class="avail-label"><span>${availTxt}</span><span>${ev.reserved||0}/${ev.capacity}</span></div>
-      <div class="avail-bar"><div class="avail-fill ${fillCls}" style="width:${pct}%"></div></div>
-    </div>` : '';
+ const avail = !ev.past ? `
+ <div class="avail-wrap">
+ <div class="avail-label"><span>${availTxt}</span><span>${ev.reserved||0}/${ev.capacity}</span></div>
+ <div class="avail-bar"><div class="avail-fill ${fillCls}" style="width:${pct}%"></div></div>
+ </div>` : '';
 
-  const cta = ev.past
-    ? `<span class="past-badge">Vergangen</span>`
-    : sold && ev.waitlist
-      ? `<div class="show-price">Ausgebucht</div><button class="btn-waitlist" onclick='openModal(${JSON.stringify(ev)}, true)'>Warteliste</button>`
-      : sold
-        ? `<span class="past-badge">Ausgebucht</span>`
-        : `<div class="show-price">Kostenlos</div><button class="btn-book" onclick='openModal(${JSON.stringify(ev)}, false)'>Ticket reservieren</button>`;
+ const cta = ev.past
+ ? `<span class="past-badge">Vergangen</span>`
+ : sold && ev.waitlist
+ ? `<div class="show-price">Ausgebucht</div><button class="btn-waitlist" onclick='openModal(${JSON.stringify(ev)}, true)'>Warteliste</button>`
+ : sold
+ ? `<span class="past-badge">Ausgebucht</span>`
+ : `<div class="show-price">Kostenlos</div><button class="btn-book" onclick='openModal(${JSON.stringify(ev)}, false)'>Ticket reservieren</button>`;
 
-  return `
-    <div class="show-card${ev.past?' past':''} reveal">
-      ${poster}
-      <div class="show-body">
-        <div class="show-eyebrow">${ev.past ? 'Vergangene Vorstellung' : 'Kommende Vorstellung'}</div>
-        <div class="show-name">${ev.title}</div>
-        ${ev.subtitle ? `<div class="show-sub">${ev.subtitle}</div>` : ''}
-        <div class="show-meta">
-          ${ev.date   ? `<span class="show-meta-item"><span class="mi">📅</span>${ev.date}</span>` : ''}
-          ${ev.time   ? `<span class="show-meta-item"><span class="mi">🕐</span>${ev.time}</span>` : ''}
-          ${ev.venue  ? `<span class="show-meta-item"><span class="mi">📍</span>${ev.venue}</span>` : ''}
-          ${ev.duration ? `<span class="show-meta-item"><span class="mi">⏱</span>${ev.duration}</span>` : ''}
-        </div>
-        ${ev.description ? `<div style="margin-top:.5rem;font-size:.82rem;color:var(--text-muted);font-weight:300;max-width:460px">${ev.description}</div>` : ''}
-        ${avail}
-      </div>
-      <div class="show-cta">${cta}</div>
-    </div>`;
+ return `
+ <div class="show-card${ev.past?' past':''} reveal">
+ ${poster}
+ <div class="show-body">
+ <div class="show-eyebrow">${ev.past ? 'Vergangene Vorstellung' : 'Kommende Vorstellung'}</div>
+ <div class="show-name">${ev.title}</div>
+ ${ev.subtitle ? `<div class="show-sub">${ev.subtitle}</div>` : ''}
+ <div class="show-meta">
+ ${ev.date ? `<span class="show-meta-item"><span class="mi"></span>${ev.date}</span>` : ''}
+ ${ev.time ? `<span class="show-meta-item"><span class="mi"></span>${ev.time}</span>` : ''}
+ ${ev.venue ? `<span class="show-meta-item"><span class="mi"></span>${ev.venue}</span>` : ''}
+ ${ev.duration ? `<span class="show-meta-item"><span class="mi">⏱</span>${ev.duration}</span>` : ''}
+ </div>
+ ${ev.description ? `<div style="margin-top:.5rem;font-size:.82rem;color:var(--text-muted);font-weight:300;max-width:460px">${ev.description}</div>` : ''}
+ ${avail}
+ </div>
+ <div class="show-cta">${cta}</div>
+ </div>`;
 }
 
-// ── MODAL ─────────────────────────────────────────────
+// MODAL 
 function openModal(ev, waitlist) {
-  currentEvent = ev; isWaitlist = waitlist;
-  const free = ev.capacity - (ev.reserved || 0);
+ currentEvent = ev; isWaitlist = waitlist;
+ const free = ev.capacity - (ev.reserved || 0);
 
-  document.getElementById('m-title').textContent = ev.title;
-  document.getElementById('m-meta').innerHTML = [
-    ev.date   ? `<span>📅 ${ev.date}</span>` : '',
-    ev.time   ? `<span>🕐 ${ev.time}</span>` : '',
-    ev.venue  ? `<span>📍 ${ev.venue}</span>` : '',
-  ].filter(Boolean).join('');
+ document.getElementById('m-title').textContent = ev.title;
+ document.getElementById('m-meta').innerHTML = [
+ ev.date ? `<span> ${ev.date}</span>` : '',
+ ev.time ? `<span> ${ev.time}</span>` : '',
+ ev.venue ? `<span> ${ev.venue}</span>` : '',
+ ].filter(Boolean).join('');
 
-  document.getElementById('spots-left').textContent = waitlist ? 'Warteliste' : `${free} Plätze frei`;
-  document.getElementById('waitlist-note-1').style.display = waitlist ? 'block' : 'none';
-  document.getElementById('qty').max = Math.min(6, free);
+ document.getElementById('spots-left').textContent = waitlist ? 'Warteliste' : `${free} Plätze frei`;
+ document.getElementById('waitlist-note-1').style.display = waitlist ? 'block' : 'none';
+ document.getElementById('qty').max = Math.min(6, free);
 
-  // Reset
-  document.getElementById('f-first').value = '';
-  document.getElementById('f-last').value  = '';
-  document.getElementById('f-email').value = '';
-  document.getElementById('f-phone').value = '';
-  document.getElementById('form-error').style.display = 'none';
-  document.getElementById('qty').value = '1';
-  goStep(1, false);
+ // Reset
+ document.getElementById('f-first').value = '';
+ document.getElementById('f-last').value = '';
+ document.getElementById('f-email').value = '';
+ document.getElementById('f-phone').value = '';
+ document.getElementById('form-error').style.display = 'none';
+ document.getElementById('qty').value = '1';
+ goStep(1, false);
 
-  document.getElementById('modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+ document.getElementById('modal').classList.add('open');
+ document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  document.body.style.overflow = '';
+ document.getElementById('modal').classList.remove('open');
+ document.body.style.overflow = '';
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ── STEPS ─────────────────────────────────────────────
+// STEPS 
 function goStep(n, animate = true) {
-  [1,2,3].forEach(i => {
-    document.getElementById(`step-${i}`).classList.toggle('active', i === n);
-    const dot = document.getElementById(`sdot-${i}`);
-    dot.classList.remove('on','done');
-    if (i < n)  dot.classList.add('done');
-    if (i === n) dot.classList.add('on');
-  });
+ [1,2,3].forEach(i => {
+ document.getElementById(`step-${i}`).classList.toggle('active', i === n);
+ const dot = document.getElementById(`sdot-${i}`);
+ dot.classList.remove('on','done');
+ if (i < n) dot.classList.add('done');
+ if (i === n) dot.classList.add('on');
+ });
 }
 
 function changeQty(d) {
-  const el = document.getElementById('qty');
-  const max = parseInt(el.max) || 6;
-  el.value = Math.max(1, Math.min(max, parseInt(el.value) + d));
+ const el = document.getElementById('qty');
+ const max = parseInt(el.max) || 6;
+ el.value = Math.max(1, Math.min(max, parseInt(el.value) + d));
 }
 
-// ── SUBMIT ────────────────────────────────────────────
+// SUBMIT 
 async function submitReservation() {
-  const first = document.getElementById('f-first').value.trim();
-  const last  = document.getElementById('f-last').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-  const qty   = document.getElementById('qty').value;
-  const errEl = document.getElementById('form-error');
+ const first = document.getElementById('f-first').value.trim();
+ const last = document.getElementById('f-last').value.trim();
+ const email = document.getElementById('f-email').value.trim();
+ const qty = document.getElementById('qty').value;
+ const errEl = document.getElementById('form-error');
 
-  errEl.style.display = 'none';
-  if (!first || !last) { return showErr('Bitte gib deinen Vor- und Nachnamen ein.'); }
-  if (!email || !email.includes('@')) { return showErr('Bitte gib eine gültige E-Mail-Adresse ein.'); }
+ errEl.style.display = 'none';
+ if (!first || !last) { return showErr('Bitte gib deinen Vor- und Nachnamen ein.'); }
+ if (!email || !email.includes('@')) { return showErr('Bitte gib eine gültige E-Mail-Adresse ein.'); }
 
-  const btn = document.getElementById('confirm-btn');
-  btn.disabled = true; btn.textContent = 'Wird verarbeitet …';
+ const btn = document.getElementById('confirm-btn');
+ btn.disabled = true; btn.textContent = 'Wird verarbeitet …';
 
-  const id   = genId();
-  const name = first + ' ' + last;
-  const tplData = {
-    to_name: first, to_email: email,
-    vorstellung: currentEvent.title,
-    datum:  (currentEvent.date||'—') + (currentEvent.time ? ', ' + currentEvent.time : ''),
-    einlass: currentEvent.doors || '—',
-    ort:    currentEvent.venue || '—',
-    anzahl: qty + (qty === '1' ? ' Ticket' : ' Tickets'),
-    reservierungs_id: id,
-    typ: isWaitlist ? 'Warteliste' : 'Reservierung',
-  };
+ const id = genId();
+ const name = first + ' ' + last;
+ const tplData = {
+ to_name: first, to_email: email,
+ vorstellung: currentEvent.title,
+ datum: (currentEvent.date||'—') + (currentEvent.time ? ', ' + currentEvent.time : ''),
+ einlass: currentEvent.doors || '—',
+ ort: currentEvent.venue || '—',
+ anzahl: qty + (qty === '1' ? ' Ticket' : ' Tickets'),
+ reservierungs_id: id,
+ typ: isWaitlist ? 'Warteliste' : 'Reservierung',
+ };
 
-  // Notify team via Formspree
-  try {
-    if (formspreeId && formspreeId !== 'DEINE_FORMSPREE_ID') {
-      await fetch(`https://formspree.io/f/${formspreeId}`, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ _subject: `🎭 ${isWaitlist?'Warteliste':'Reservierung'}: ${currentEvent.title}`, ...tplData, name }),
-      });
-    }
-  } catch {}
+ // Notify team via Formspree
+ try {
+ if (formspreeId && formspreeId !== 'DEINE_FORMSPREE_ID') {
+ await fetch(`https://formspree.io/f/${formspreeId}`, {
+ method: 'POST',
+ headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+ body: JSON.stringify({ _subject: ` ${isWaitlist?'Warteliste':'Reservierung'}: ${currentEvent.title}`, ...tplData, name }),
+ });
+ }
+ } catch {}
 
-  // Customer confirmation via EmailJS
-  try {
-    if (window._ejsSvc && window._ejsTpl) {
-      await emailjs.send(window._ejsSvc, window._ejsTpl, { ...tplData, reply_to: 'jugendensemblewsp@gmail.com' });
-    }
-  } catch {}
+ // Customer confirmation via EmailJS
+ try {
+ if (window._ejsSvc && window._ejsTpl) {
+ await emailjs.send(window._ejsSvc, window._ejsTpl, { ...tplData, reply_to: 'jugendensemblewsp@gmail.com' });
+ }
+ } catch {}
 
-  btn.disabled = false; btn.textContent = 'Jetzt reservieren ✓';
+ btn.disabled = false; btn.textContent = 'Jetzt reservieren ';
 
-  // Show ticket
-  buildTicket({ name, email, qty, id });
-  goStep(3);
+ // Show ticket
+ buildTicket({ name, email, qty, id });
+ goStep(3);
 }
 
-// ── TICKET ────────────────────────────────────────────
+// TICKET 
 function buildTicket({ name, email, qty, id }) {
-  document.getElementById('conf-email').textContent = email;
-  document.getElementById('t-show').textContent  = currentEvent.title;
-  document.getElementById('t-sub').textContent   = currentEvent.subtitle || '';
-  document.getElementById('t-name').textContent  = name;
-  document.getElementById('t-qty').textContent   = qty + (qty === '1' ? ' Ticket' : ' Tickets');
-  document.getElementById('t-date').textContent  = (currentEvent.date||'—') + (currentEvent.time ? ' · ' + currentEvent.time : '');
-  document.getElementById('t-doors').textContent = currentEvent.doors || '—';
-  document.getElementById('t-venue').textContent = currentEvent.venue || '—';
-  document.getElementById('t-id').textContent    = id;
+ document.getElementById('conf-email').textContent = email;
+ document.getElementById('t-show').textContent = currentEvent.title;
+ document.getElementById('t-sub').textContent = currentEvent.subtitle || '';
+ document.getElementById('t-name').textContent = name;
+ document.getElementById('t-qty').textContent = qty + (qty === '1' ? ' Ticket' : ' Tickets');
+ document.getElementById('t-date').textContent = (currentEvent.date||'—') + (currentEvent.time ? ' · ' + currentEvent.time : '');
+ document.getElementById('t-doors').textContent = currentEvent.doors || '—';
+ document.getElementById('t-venue').textContent = currentEvent.venue || '—';
+ document.getElementById('t-id').textContent = id;
 
-  // QR Code
-  const qrEl = document.getElementById('qr-canvas');
-  qrEl.innerHTML = '';
-  new QRCode(qrEl, {
-    text: `WSP|${currentEvent.title}|${name}|${qty}|${currentEvent.date||''}|${id}`,
-    width: 120, height: 120,
-    colorDark: '#000000', colorLight: '#ffffff',
-  });
+ // QR Code
+ const qrEl = document.getElementById('qr-canvas');
+ qrEl.innerHTML = '';
+ new QRCode(qrEl, {
+ text: `WSP|${currentEvent.title}|${name}|${qty}|${currentEvent.date||''}|${id}`,
+ width: 120, height: 120,
+ colorDark: '#000000', colorLight: '#ffffff',
+ });
 
-  // Barcode decoration
-  const bc = document.getElementById('t-barcode');
-  bc.innerHTML = '';
-  const seed = id.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
-  for (let i = 0; i < 48; i++) {
-    const h = 8 + ((seed * (i+1) * 7) % 20);
-    const w = (i % 5 === 0) ? 3 : (i % 3 === 0) ? 4 : 2;
-    const bar = document.createElement('span');
-    bar.style.cssText = `height:${h}px;width:${w}px`;
-    bc.appendChild(bar);
-  }
+ // Barcode decoration
+ const bc = document.getElementById('t-barcode');
+ bc.innerHTML = '';
+ const seed = id.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
+ for (let i = 0; i < 48; i++) {
+ const h = 8 + ((seed * (i+1) * 7) % 20);
+ const w = (i % 5 === 0) ? 3 : (i % 3 === 0) ? 4 : 2;
+ const bar = document.createElement('span');
+ bar.style.cssText = `height:${h}px;width:${w}px`;
+ bc.appendChild(bar);
+ }
 }
 
-// ── HELPERS ───────────────────────────────────────────
+// HELPERS 
 function genId() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return 'WSP-' + Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+ const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+ return 'WSP-' + Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
 }
 function showErr(msg) {
-  const el = document.getElementById('form-error');
-  el.textContent = msg; el.style.display = 'block';
+ const el = document.getElementById('form-error');
+ el.textContent = msg; el.style.display = 'block';
 }
 </script>
 </body>
