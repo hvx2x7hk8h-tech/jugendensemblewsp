@@ -1,5 +1,5 @@
 backend:
-  name: github
+  name: JWSP Admin
   repo: hvx2x7hk8h-tech/jugendensemblewsp
   branch: main
   auth_type: pkce
