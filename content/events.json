@@ -14,7 +14,9 @@
       "reserved": 67,
       "image": "https://static.wixstatic.com/media/511c42_03e54940eec948628346631343499d5f~mv2.png",
       "waitlist": true,
-      "past": true
+      "past": true,
+      "ticket_system": "custom",
+      "eventim_url": ""
     }
   ]
 }

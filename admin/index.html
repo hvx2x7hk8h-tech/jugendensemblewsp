@@ -190,7 +190,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tex
     <div class="tb-sep"></div>
     <span id="save-status"></span>
     <div class="tb-right">
-      <button class="tb-btn" onclick="window.open('https://wsp-8b8.pages.dev','_blank')">Website ansehen</button>
+      <button class="tb-btn" onclick="window.open('https://jugendensemble-wsp.pages.dev','_blank')">Website ansehen</button>
       <button class="tb-btn save" id="savebtn" onclick="saveAll()">Speichern</button>
       <button class="tb-btn out" onclick="logout()">Abmelden</button>
     </div>
@@ -412,7 +412,19 @@ function renderEvents(){
         <div class="field"><label>Veranstaltungsort</label><input value="${esc(ev.venue)}" oninput="events[${i}].venue=this.value"></div>
         <div class="field"><label>Dauer</label><input value="${esc(ev.duration)}" placeholder="ca. 90 Min." oninput="events[${i}].duration=this.value"></div>
       </div>
-      <div class="field"><label>Ticket-Link (Eventbrite o.ae.)</label><input type="url" value="${esc(ev.ticket_url)}" placeholder="https://…" oninput="events[${i}].ticket_url=this.value"></div>
+      <div class="field">
+        <label>Ticketsystem</label>
+        <select onchange="events[${i}].ticket_system=this.value;toggleEventimField(${i},this.value)" style="border-radius:8px">
+          <option value="custom" ${!ev.ticket_system||ev.ticket_system==='custom'?'selected':''}>Kostenlos (eigenes System)</option>
+          <option value="eventim" ${ev.ticket_system==='eventim'?'selected':''}>Kostenpflichtig (Eventim)</option>
+        </select>
+        <div class="hint">Kostenlos = eigenes Reservierungsformular. Eventim = externer Ticketshop eingebettet.</div>
+      </div>
+      <div class="field" id="eventim-field-${i}" style="display:${ev.ticket_system==='eventim'?'block':'none'}">
+        <label>Eventim Widget-URL</label>
+        <input type="url" value="${esc(ev.eventim_url)}" placeholder="https://www.eventim.de/event/…" oninput="events[${i}].eventim_url=this.value">
+        <div class="hint">Auf eventim.de dein Event erstellen → Teilen → Link kopieren und hier einfügen.</div>
+      </div>
       <div class="field"><label>Beschreibung (optional)</label><input value="${esc(ev.description)}" oninput="events[${i}].description=this.value"></div>
       <div class="field"><label>Bild-URL (optional)</label><input type="url" value="${esc(ev.image)}" oninput="events[${i}].image=this.value"></div>
       <div class="field">
@@ -425,7 +437,7 @@ function renderEvents(){
 }
 
 function addEvent(){
-  events.push({title:'',date:'',time:'',doors:'',venue:'',duration:'',description:'',ticket_url:'',image:'',past:false,capacity:80,reserved:0,waitlist:true});
+  events.push({title:'',date:'',time:'',doors:'',venue:'',duration:'',description:'',ticket_url:'',eventim_url:'',ticket_system:'custom',image:'',past:false,capacity:80,reserved:0,waitlist:true});
   renderEvents();
   document.getElementById('ev-list').lastElementChild?.scrollIntoView({behavior:'smooth'});
 }
@@ -486,6 +498,12 @@ function toast(m, t=''){
   el.textContent = m; el.className = 'toast show ' + t;
   setTimeout(() => el.classList.remove('show'), 4000);
 }
+
+function toggleEventimField(i, system) {
+  const el = document.getElementById('eventim-field-' + i);
+  if (el) el.style.display = system === 'eventim' ? 'block' : 'none';
+}
+
 function b64e(s){ return btoa(unescape(encodeURIComponent(s))); }
 function b64d(s){ return decodeURIComponent(escape(atob(s.replace(/\n/g,'')))); }
 </script>
