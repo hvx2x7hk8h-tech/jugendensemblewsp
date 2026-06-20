@@ -605,6 +605,18 @@
  </div>
 </div>
 
+<!-- PAST SHOWS -->
+<div class="section-dark" id="past-section">
+ <div class="section-inner">
+ <div class="reveal" style="margin-bottom:2.5rem">
+ <span class="section-label">Rückblick</span>
+ <h2>Vergangene Vorstellungen</h2>
+ <div class="divider"></div>
+ </div>
+ <div class="shows-grid reveal" id="shows-past"></div>
+ </div>
+</div>
+
 
 <!-- FOOTER -->
 <footer>
@@ -624,6 +636,104 @@
  </div>
 </footer>
 
+
+<!-- TICKET MODAL -->
+<div id="modal">
+ <div class="modal-bg" onclick="closeModal()"></div>
+ <div class="modal-box">
+ <div class="steps-bar">
+ <div class="step-dot" id="sdot-1"><div class="num"><span>1</span></div><span class="lbl">Plätze</span></div>
+ <div class="step-line"></div>
+ <div class="step-dot" id="sdot-2"><div class="num"><span>2</span></div><span class="lbl">Deine Daten</span></div>
+ <div class="step-line"></div>
+ <div class="step-dot" id="sdot-3"><div class="num"><span>3</span></div><span class="lbl">Ticket</span></div>
+ </div>
+ <div class="modal-head">
+ <div class="modal-show-title" id="m-title"></div>
+ <div class="modal-show-meta" id="m-meta"></div>
+ </div>
+ <div class="modal-body">
+
+ <!-- STEP 1: Anzahl -->
+ <div class="step-pane active" id="step-1">
+ <div class="waitlist-note" id="waitlist-note-1" style="display:none">
+ <strong>Warteliste:</strong> Diese Vorstellung ist aktuell ausgebucht. Wir benachrichtigen dich per E-Mail, falls ein Platz frei wird.
+ </div>
+ <div class="f-group">
+ <label>Anzahl Tickets</label>
+ <div class="qty-wrap">
+ <button class="qty-btn" type="button" onclick="changeQty(-1)">−</button>
+ <input class="qty-num" id="qty" type="text" value="1" readonly>
+ <button class="qty-btn" type="button" onclick="changeQty(1)">+</button>
+ </div>
+ <div class="qty-hint"><span id="spots-left"></span></div>
+ </div>
+ <button class="btn-next" type="button" onclick="goStep(2)">Weiter</button>
+ </div>
+
+ <!-- STEP 2: Daten -->
+ <div class="step-pane" id="step-2">
+ <button class="btn-back" type="button" onclick="goStep(1)">← Zurück</button>
+ <div class="f-row">
+ <div class="f-group">
+ <label>Vorname</label>
+ <input id="f-first" type="text" placeholder="Vorname">
+ </div>
+ <div class="f-group">
+ <label>Nachname</label>
+ <input id="f-last" type="text" placeholder="Nachname">
+ </div>
+ </div>
+ <div class="f-group">
+ <label>E-Mail</label>
+ <input id="f-email" type="email" placeholder="deine@email.de">
+ </div>
+ <div class="f-group">
+ <label>Telefon (optional)</label>
+ <input id="f-phone" type="tel" placeholder="Für kurzfristige Änderungen">
+ </div>
+ <div id="form-error"></div>
+ <button class="btn-confirm" id="confirm-btn" type="button" onclick="submitReservation()">Jetzt reservieren →</button>
+ <p class="f-note">Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz.html">Datenschutzerklärung</a> zu.</p>
+ </div>
+
+ <!-- STEP 3: Ticket -->
+ <div class="step-pane" id="step-3">
+ <div class="confirm-msg"><span class="icon">✓</span> Reservierung erfolgreich! Eine Bestätigung wurde an <strong id="conf-email"></strong> gesendet.</div>
+ <div class="ticket-outer">
+ <div class="ticket-inner">
+ <div class="ticket-brand">Jugendensemble WSP</div>
+ <div class="ticket-show" id="t-show"></div>
+ <div class="ticket-show-sub" id="t-sub"></div>
+ <div class="ticket-grid">
+ <div class="ticket-field"><label>Name</label><span id="t-name"></span></div>
+ <div class="ticket-field"><label>Tickets</label><span id="t-qty"></span></div>
+ <div class="ticket-field"><label>Datum</label><span id="t-date"></span></div>
+ <div class="ticket-field"><label>Einlass</label><span id="t-doors"></span></div>
+ <div class="ticket-field"><label>Ort</label><span id="t-venue"></span></div>
+ </div>
+ </div>
+ <div class="tear-line"><div class="tear-circle" style="margin-left:-14px"></div><div class="tear-dash"></div><div class="tear-circle" style="margin-right:-14px"></div></div>
+ <div class="ticket-inner">
+ <div class="ticket-qr-row">
+ <div id="qr-canvas"></div>
+ <div class="ticket-qr-info">
+ <div class="ticket-id-label">Reservierungs-ID</div>
+ <div class="ticket-id-val" id="t-id"></div>
+ <div class="ticket-id-barcode" id="t-barcode"></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <div class="ticket-actions">
+ <button class="btn-print" type="button" onclick="window.print()">Drucken</button>
+ <button class="btn-close-modal" type="button" onclick="closeModal()">Schließen</button>
+ </div>
+ </div>
+
+ </div>
+ </div>
+</div>
 
 <!-- EVENTIM MODAL -->
 <div id="eventim-modal" style="position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;padding:1rem">
@@ -766,6 +876,14 @@ function openModal(ev, waitlist) {
 function closeModal() {
  document.getElementById('modal').classList.remove('open');
  document.body.style.overflow = '';
+}
+function closeEventimModal() {
+ const m = document.getElementById('eventim-modal');
+ if (!m) return;
+ m.style.display = 'none';
+ document.body.style.overflow = '';
+ const ifr = document.getElementById('eventim-iframe');
+ if (ifr) ifr.src = '';
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEventimModal(); } });
 
