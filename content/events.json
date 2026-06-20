@@ -17,6 +17,23 @@
       "past": true,
       "ticket_system": "custom",
       "eventim_url": ""
+    },
+    {
+      "title": "Känguru Kroniken",
+      "date": "Sa. 18.07.2026",
+      "time": "20:00 Uhr",
+      "doors": "19:30 Uhr",
+      "venue": "Hier",
+      "duration": "ca. 90 Minunten",
+      "description": "",
+      "ticket_url": "",
+      "eventim_url": "",
+      "ticket_system": "custom",
+      "image": "",
+      "past": false,
+      "capacity": 80,
+      "reserved": 0,
+      "waitlist": true
     }
   ]
 }
