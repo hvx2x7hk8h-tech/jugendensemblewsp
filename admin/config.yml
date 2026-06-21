@@ -37,6 +37,8 @@ collections:
               - {label: "Warteliste?", name: "waitlist", widget: "boolean", default: true}
               - {label: "Poster / Bild", name: "image", widget: "image", required: false}
               - {label: "Vergangen?", name: "past", widget: "boolean", default: false}
+              - {label: "Ticket-System", name: "ticket_system", widget: "select", default: "custom", options: [{label: "Kostenlose Reservierung (eigenes System)", value: "custom"}, {label: "Eventim Ticketshop", value: "eventim"}]}
+              - {label: "Eventim-Link", name: "eventim_url", widget: "string", required: false, hint: "Nur nötig, wenn Ticket-System = Eventim. Den EINBETTBAREN Shop-Link aus eurem EVENTIM.Light-Account (Shop → Shop Einbindung → iFrame), NICHT den normalen Link von eventim.de — der lässt sich nicht einbetten."}
 
   - name: "seiten"
     label: "Seiteninhalte"
