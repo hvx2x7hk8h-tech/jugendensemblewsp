@@ -28,7 +28,7 @@
       "description": "",
       "ticket_url": "",
       "eventim_url": "<div style=\"padding: 0;\"><iframe id=\"eventim-light-iframe-v2-6a37d00fc56e7adfb0dbe632-event-6a37d0ee01593e2b60996f8c\" src=\"https://www.eventim-light.com/de/a/6a37d00fc56e7adfb0dbe632/iframe/e/6a37d0ee01593e2b60996f8c/\" width=\"100%\" data-scroll=\"true\" data-scroll-offset-y=\"0\" scrolling=\"no\" frameborder=\"0\" name=\"eventim-light-iframe-v2-6a37d00fc56e7adfb0dbe632-event-6a37d0ee01593e2b60996f8c\"></iframe><script type=\"text/javascript\" src=\"https://www.eventim-light.com/de/a/6a37d00fc56e7adfb0dbe632/public/iframe/el-shop.js\"></script></div>",
-      "ticket_system": "custom",
+      "ticket_system": "eventim",
       "image": "",
       "past": false,
       "capacity": 80,
