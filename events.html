@@ -325,9 +325,10 @@
  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
  }
  .eventim-close:hover { border-color: var(--gold); color: var(--gold); }
- .eventim-frame-wrap { position: relative; flex: 1; overflow: hidden; }
- .eventim-frame-wrap iframe {
- width: 100%; height: 100%; border: none; display: block; position: relative; z-index: 2; background: #fff;
+ .eventim-frame-wrap { position: relative; flex: 1; overflow-y: auto; }
+ #eventim-frame-host { width: 100%; }
+ #eventim-frame-host iframe {
+ width: 100%; min-height: 70vh; border: none; display: block; position: relative; z-index: 2; background: #fff;
  }
  .eventim-loading {
  position: absolute; inset: 0; z-index: 1;
@@ -831,7 +832,7 @@
         <div class="spinner"></div>
         <span>Ticketshop wird geladen …</span>
       </div>
-      <iframe id="eventim-iframe" src="" title="Eventim Ticketshop" loading="eager"></iframe>
+      <div id="eventim-frame-host"></div>
     </div>
     <div class="eventim-fallback">
       Lädt der Shop nicht? <a id="eventim-fallback-link" href="#" target="_blank" rel="noopener noreferrer">Hier direkt bei Eventim öffnen ↗</a>
@@ -841,6 +842,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- EVENTIM.Light Resize-Script — erkennt automatisch jedes iFrame mit id="eventim-light-iframe..." und passt die Höhe live an -->
+<script src="https://www.eventim-light.com/de/a/6a37d00fc56e7adfb0dbe632/public/iframe/el-shop.js"></script>
 <script src="main.js"></script>
 <script>
 // INIT 
@@ -852,18 +855,22 @@ let currentEvent = null, formspreeId = '', isWaitlist = false;
  const img = home?.hero_image || 'https://static.wixstatic.com/media/511c42_025226b9919d4c0281caa5309b7d210c~mv2.jpeg';
  document.querySelectorAll('.page-hero-bg').forEach(el => el.style.backgroundImage = `url('${img}')`);
 
+ // In einen eigenen try/catch isoliert: Falls das EmailJS-CDN-Script aus irgendeinem Grund nicht
+ // lädt (Ausfall, Adblocker, ...), darf das NIEMALS die eigentliche Ticket-Anzeige verhindern.
+ try {
  const s = await loadJSON('/content/settings.json');
  if (s?.formspree_id) formspreeId = s.formspree_id;
- if (s?.emailjs_public_key) {
+ if (s?.emailjs_public_key && typeof emailjs !== 'undefined') {
  emailjs.init({ publicKey: s.emailjs_public_key });
  window._ejsSvc = s.emailjs_service_id || '';
  window._ejsTpl = s.emailjs_template_id || '';
  }
+ } catch (e) { console.warn('Formspree/EmailJS-Setup übersprungen:', e); }
 
  const data = await loadJSON('/content/events.json');
- if (!data?.events) return;
- renderShows('shows-upcoming', data.events.filter(e => !e.past));
- renderShows('shows-past', data.events.filter(e => e.past));
+ const allEvents = Array.isArray(data?.events) ? data.events : [];
+ renderShows('shows-upcoming', allEvents.filter(e => !e.past));
+ renderShows('shows-past', allEvents.filter(e => e.past));
 })();
 
 // RENDER 
@@ -879,10 +886,12 @@ function renderShows(id, events) {
 }
 
 function buildCard(ev) {
- const isEventim = ev.ticket_system === 'eventim' && !!ev.eventim_url;
+ const wantsEventim = ev.ticket_system === 'eventim';
+ const isEventim = wantsEventim && !!ev.eventim_url; // Eventim ausgewählt UND Link vorhanden
  const evJSON = JSON.stringify(ev).replace(/'/g, '&#39;'); // verhindert kaputtes HTML bei Apostrophen in Titel/Beschreibung etc.
- const free = ev.capacity - (ev.reserved || 0);
- const pct = Math.min(100, Math.round(((ev.reserved||0) / ev.capacity) * 100));
+ const capacity = Number(ev.capacity) > 0 ? Number(ev.capacity) : 80; // Sicherheitsnetz falls im CMS leer gelassen
+ const free = capacity - (ev.reserved || 0);
+ const pct = Math.min(100, Math.round(((ev.reserved||0) / capacity) * 100));
  const sold = free <= 0;
  const low = free > 0 && free <= 10;
  const fillCls = sold ? 'full' : low ? 'low' : '';
@@ -893,14 +902,18 @@ function buildCard(ev) {
  : `<div class="show-poster-ph"></div>`;
 
  // Eventim verwaltet sein eigenes Kontingent — unsere Platzanzeige passt da nicht.
- const avail = (!ev.past && !isEventim) ? `
+ const avail = (!ev.past && !wantsEventim) ? `
  <div class="avail-wrap">
- <div class="avail-label"><span>${availTxt}</span><span>${ev.reserved||0}/${ev.capacity}</span></div>
+ <div class="avail-label"><span>${availTxt}</span><span>${ev.reserved||0}/${capacity}</span></div>
  <div class="avail-bar"><div class="avail-fill ${fillCls}" style="width:${pct}%"></div></div>
  </div>` : '';
 
  const cta = ev.past
  ? `<span class="past-badge">Vergangen</span>`
+ // Eventim ausgewählt, aber Link fehlt im CMS — NICHT auf die kostenlose Reservierung zurückfallen
+ // (sonst würden eigentlich kostenpflichtige Tickets als "Kostenlos reservierbar" erscheinen).
+ : wantsEventim && !isEventim
+ ? `<span class="past-badge">Tickets in Kürze</span>`
  : isEventim
  ? `<div class="show-price">Ticketverkauf</div><button class="btn-eventim" onclick='openEventimModal(${evJSON})'>Bei Eventim sichern ↗</button>`
  : sold && ev.waitlist
@@ -932,7 +945,8 @@ function buildCard(ev) {
 // MODAL 
 function openModal(ev, waitlist) {
  currentEvent = ev; isWaitlist = waitlist;
- const free = ev.capacity - (ev.reserved || 0);
+ const capacity = Number(ev.capacity) > 0 ? Number(ev.capacity) : 80; // Sicherheitsnetz falls im CMS leer gelassen
+ const free = capacity - (ev.reserved || 0);
 
  document.getElementById('m-title').textContent = ev.title;
  document.getElementById('m-badge').textContent = waitlist ? 'Warteliste' : 'Kostenlose Reservierung';
@@ -944,7 +958,7 @@ function openModal(ev, waitlist) {
 
  document.getElementById('spots-left').textContent = waitlist ? 'Warteliste' : `${free} Plätze frei`;
  document.getElementById('waitlist-note-1').style.display = waitlist ? 'block' : 'none';
- document.getElementById('qty').max = Math.min(6, free);
+ document.getElementById('qty').max = Math.max(1, Math.min(6, free));
 
  // Reset
  document.getElementById('f-first').value = '';
@@ -962,14 +976,30 @@ function closeModal() {
  document.getElementById('modal').classList.remove('open');
  document.body.style.overflow = '';
 }
+let _eventimFrameCounter = 0;
 function openEventimModal(ev) {
+ if (!ev || !ev.eventim_url) return; // Sicherheitsnetz — sollte durch buildCard() nie passieren
  document.getElementById('eventim-title').textContent = ev.title;
  document.getElementById('eventim-meta').textContent = [ev.date, ev.time, ev.venue].filter(Boolean).join(' · ');
  document.getElementById('eventim-fallback-link').href = ev.eventim_url;
  document.getElementById('eventim-loading').style.display = 'flex';
- const ifr = document.getElementById('eventim-iframe');
- ifr.onload = () => { document.getElementById('eventim-loading').style.display = 'none'; };
- ifr.src = ev.eventim_url;
+
+ // Frisches iFrame pro Öffnung — die ID muss mit "eventim-light-iframe" beginnen,
+ // damit das offizielle EVENTIM.Light-Resize-Script (el-shop.js) es automatisch erkennt
+ // und die Höhe live an den Inhalt anpasst.
+ // scrolling="auto" (statt "no") ist bewusst die Rückfallebene: Falls das Resize-Script aus
+ // irgendeinem Grund nicht lädt (CDN-Ausfall, Adblocker), bekommt das iFrame trotzdem eine
+ // eigene Scrollbar und bleibt benutzbar. Sobald das Script erfolgreich eine Höhe meldet,
+ // schaltet es selbst auf overflow:hidden um — dann verschwindet die iFrame-Scrollbar automatisch.
+ const elId = `eventim-light-iframe-modal-${_eventimFrameCounter++}`;
+ const host = document.getElementById('eventim-frame-host');
+ host.innerHTML = `<iframe id="${elId}" name="${elId}" src="${ev.eventim_url}" width="100%" data-scroll="false" scrolling="auto" frameborder="0"></iframe>`;
+ const loadingEl = document.getElementById('eventim-loading');
+ document.getElementById(elId).addEventListener('load', () => { loadingEl.style.display = 'none'; });
+ // Sicherheitsnetz: Spinner spätestens nach 8s ausblenden, falls das load-Event aus irgendeinem
+ // Grund nie feuert — der Fallback-Link unten bleibt ohnehin die ganze Zeit sichtbar.
+ setTimeout(() => { loadingEl.style.display = 'none'; }, 8000);
+
  document.getElementById('eventim-modal').classList.add('open');
  document.body.style.overflow = 'hidden';
 }
@@ -978,7 +1008,7 @@ function closeEventimModal() {
  if (!m) return;
  m.classList.remove('open');
  document.body.style.overflow = '';
- document.getElementById('eventim-iframe').src = '';
+ document.getElementById('eventim-frame-host').innerHTML = '';
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEventimModal(); } });
 
@@ -1049,12 +1079,17 @@ async function submitReservation() {
 
  btn.disabled = false; btn.textContent = 'Jetzt reservieren ';
 
- // Show ticket
+ // Letztes Sicherheitsnetz: Egal was hier schiefgeht, der Nutzer bleibt nie ohne Rückmeldung stecken.
+ try {
  buildTicket({ name, email, qty, id });
  goStep(3);
+ } catch (e) {
+ console.error('Ticket konnte nicht angezeigt werden:', e);
+ showErr('Etwas ist schiefgelaufen. Deine Reservierung wurde trotzdem übermittelt — bitte versuch es erneut oder schreib uns kurz per E-Mail.');
+ }
 }
 
-// TICKET 
+// TICKET
 function buildTicket({ name, email, qty, id }) {
  document.getElementById('conf-email').textContent = email;
  document.getElementById('t-show').textContent = currentEvent.title;
@@ -1066,14 +1101,20 @@ function buildTicket({ name, email, qty, id }) {
  document.getElementById('t-venue').textContent = currentEvent.venue || '—';
  document.getElementById('t-id').textContent = id;
 
- // QR Code
+ // QR Code — in try/catch isoliert: Falls die QRCode-Bibliothek (externes CDN) mal nicht lädt,
+ // darf das Ticket trotzdem angezeigt werden, nur eben ohne QR-Grafik.
  const qrEl = document.getElementById('qr-canvas');
  qrEl.innerHTML = '';
+ try {
  new QRCode(qrEl, {
  text: `WSP|${currentEvent.title}|${name}|${qty}|${currentEvent.date||''}|${id}`,
  width: 120, height: 120,
  colorDark: '#000000', colorLight: '#ffffff',
  });
+ } catch (e) {
+ console.warn('QR-Code konnte nicht erzeugt werden:', e);
+ qrEl.innerHTML = '<div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--text-muted);text-align:center;border:1px dashed var(--border);padding:.5rem">Reservierungs-ID siehe rechts</div>';
+ }
 
  // Barcode decoration
  const bc = document.getElementById('t-barcode');
