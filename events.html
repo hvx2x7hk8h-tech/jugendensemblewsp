@@ -977,11 +977,24 @@ function closeModal() {
  document.body.style.overflow = '';
 }
 let _eventimFrameCounter = 0;
+// Robust gegen beide Eingabe-Varianten im CMS-Feld "Eventim-Link":
+// entweder die reine URL, ODER der komplette Embed-Code-Schnipsel (<div><iframe src="...">...).
+// Zieht in jedem Fall zuverlässig die eigentliche src-URL heraus.
+function extractEventimSrc(raw) {
+ if (!raw) return '';
+ const trimmed = String(raw).trim();
+ if (!trimmed.includes('<')) return trimmed; // sieht schon nach einer reinen URL aus
+ const match = trimmed.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);
+ return match ? match[1] : trimmed;
+}
+
 function openEventimModal(ev) {
  if (!ev || !ev.eventim_url) return; // Sicherheitsnetz — sollte durch buildCard() nie passieren
+ const src = extractEventimSrc(ev.eventim_url);
+ if (!src) return;
  document.getElementById('eventim-title').textContent = ev.title;
  document.getElementById('eventim-meta').textContent = [ev.date, ev.time, ev.venue].filter(Boolean).join(' · ');
- document.getElementById('eventim-fallback-link').href = ev.eventim_url;
+ document.getElementById('eventim-fallback-link').href = src;
  document.getElementById('eventim-loading').style.display = 'flex';
 
  // Frisches iFrame pro Öffnung — die ID muss mit "eventim-light-iframe" beginnen,
@@ -993,7 +1006,7 @@ function openEventimModal(ev) {
  // schaltet es selbst auf overflow:hidden um — dann verschwindet die iFrame-Scrollbar automatisch.
  const elId = `eventim-light-iframe-modal-${_eventimFrameCounter++}`;
  const host = document.getElementById('eventim-frame-host');
- host.innerHTML = `<iframe id="${elId}" name="${elId}" src="${ev.eventim_url}" width="100%" data-scroll="false" scrolling="auto" frameborder="0"></iframe>`;
+ host.innerHTML = `<iframe id="${elId}" name="${elId}" src="${src}" width="100%" data-scroll="false" scrolling="auto" frameborder="0"></iframe>`;
  const loadingEl = document.getElementById('eventim-loading');
  document.getElementById(elId).addEventListener('load', () => { loadingEl.style.display = 'none'; });
  // Sicherheitsnetz: Spinner spätestens nach 8s ausblenden, falls das load-Event aus irgendeinem
