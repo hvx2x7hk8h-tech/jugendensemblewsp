@@ -142,6 +142,24 @@ html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tex
 }
 .add-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gd)}
 
+/* KASSE */
+.pos-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:1.2rem}
+.pos-card{background:var(--s1);border:2px solid var(--gb);border-radius:10px;padding:1.2rem}
+.pos-card h3{font-family:var(--fd);font-size:.9rem;margin-bottom:1rem}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.7rem}
+.product-btn{border:2px solid var(--gb);background:var(--s2);border-radius:8px;padding:.8rem;text-align:left;cursor:pointer;color:var(--text)}
+.product-btn:hover{border-color:var(--gold);background:var(--gd)}
+.product-btn small{display:block;color:var(--muted);margin-top:.25rem}
+.cart-row,.reservation-row{display:flex;justify-content:space-between;gap:.8rem;padding:.65rem 0;border-bottom:1px solid var(--gb);font-size:.82rem}
+.cart-row button{border:0;background:none;color:var(--err);cursor:pointer;font-size:1rem}
+.pos-total{font-size:1.2rem;font-weight:700;margin:1rem 0}.pos-actions{display:flex;gap:.7rem;flex-wrap:wrap}
+.pay-btn{padding:.7rem 1rem;border:0;border-radius:7px;background:var(--gold);color:#fff;cursor:pointer;font-family:var(--fb);font-weight:700}
+.pay-btn.secondary{background:var(--s3);color:var(--text)}
+.status{font-size:.7rem;border-radius:50px;padding:.2rem .5rem;background:var(--s3);white-space:nowrap}.status.paid{background:#dff4e7;color:#187341}.status.open{background:#fff2d8;color:#8b5a00}
+.table-wrap{overflow-x:auto}.data-table{width:100%;border-collapse:collapse;font-size:.78rem}.data-table th,.data-table td{text-align:left;padding:.65rem;border-bottom:1px solid var(--gb);vertical-align:top}.data-table th{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mini-btn{border:1px solid var(--gb);background:var(--s1);padding:.35rem .5rem;border-radius:5px;cursor:pointer;font-size:.7rem}.mini-btn:hover{border-color:var(--gold)}
+@media(max-width:900px){.pos-grid{grid-template-columns:1fr}}
+
 /* TOAST */
 #toast{
   position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
@@ -203,6 +221,9 @@ html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tex
       <div class="nav-item" onclick="show('about',this)">Über uns</div>
       <div class="nav-item" onclick="show('events',this)">Veranstaltungen</div>
       <div class="nav-item" onclick="show('contact',this)">Kontakt</div>
+      <div class="sb-group">Verkauf</div>
+      <div class="nav-item" onclick="show('kasse',this)">Pausenkasse</div>
+      <div class="nav-item" onclick="show('tickets',this)">Ticketkasse</div>
       <div class="sb-group">Rechtliches</div>
       <div class="nav-item" onclick="show('impressum',this)">Impressum</div>
       <div class="nav-item" onclick="show('datenschutz',this)">Datenschutz</div>
@@ -243,6 +264,34 @@ html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tex
         <div class="sec-sub">Einleitungstext auf der Kontaktseite.</div>
         <div class="field"><label>Einleitungstext</label><textarea id="c-intro"></textarea></div>
         <div class="field"><label>Ort</label><input id="c-loc" type="text"></div>
+      </div>
+
+      <!-- PAUSENKASSE -->
+      <div class="sec" id="sec-kasse">
+        <div class="sec-title">Pausenkasse</div>
+        <div class="sec-sub">Verkauf für Getränke und Essen. Bestände werden beim Abschluss automatisch reduziert.</div>
+        <div class="field"><label>Vorstellung</label><select id="pos-event" onchange="renderPos()"></select></div>
+        <div class="pos-grid">
+          <div class="pos-card"><h3>Produkte</h3><div class="product-grid" id="product-grid"></div></div>
+          <div class="pos-card"><h3>Warenkorb</h3><div id="cart-list"></div><div class="pos-total" id="cart-total">0,00 €</div><div class="field"><label>Zahlungsart</label><select id="pos-payment"><option value="cash">Bar</option><option value="card">Karte</option></select></div><div class="pos-actions"><button class="pay-btn" onclick="finishSale()">Verkauf abschließen</button><button class="pay-btn secondary" onclick="clearCart()">Leeren</button></div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="sec-title">Produkte & Bestand</div>
+        <div class="sec-sub">Preis in Euro; Bestand leer lassen, wenn ein Produkt nicht begrenzt werden soll.</div>
+        <div id="product-editor"></div><button class="add-btn" onclick="addProduct()">+ Produkt hinzufügen</button><div class="pos-actions" style="margin-top:1rem"><button class="pay-btn" onclick="saveProducts()">Produktkatalog speichern</button></div>
+        <div class="divider"></div><div class="sec-title">Letzte Verkäufe</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Zeit</th><th>Vorstellung</th><th>Artikel</th><th>Zahlung</th><th>Summe</th></tr></thead><tbody id="sales-list"></tbody></table></div>
+      </div>
+
+      <!-- TICKETKASSE -->
+      <div class="sec" id="sec-tickets">
+        <div class="sec-title">Ticketkasse</div>
+        <div class="sec-sub">Online-Reservierungen vor Ort bezahlen oder einlösen; zusätzlich neue Tickets direkt verkaufen.</div>
+        <div class="field"><label>Suche</label><input id="reservation-search" oninput="renderReservations()" placeholder="Name, E-Mail, Reservierungs-ID oder Vorstellung"></div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Gast</th><th>Vorstellung</th><th>Tickets</th><th>Status</th><th>Aktion</th></tr></thead><tbody id="reservations-list"></tbody></table></div>
+        <div class="divider"></div><div class="sec-title">Vor-Ort-Ticket</div>
+        <div class="field-row"><div class="field"><label>Name</label><input id="walkin-name" placeholder="Name des Gastes"></div><div class="field"><label>E-Mail (optional)</label><input id="walkin-email" type="email"></div></div>
+        <div class="field-row"><div class="field"><label>Vorstellung</label><select id="walkin-event"></select></div><div class="field"><label>Anzahl</label><input id="walkin-qty" type="number" min="1" value="1"></div></div>
+        <div class="field"><label>Zahlungsart</label><select id="walkin-payment"><option value="cash">Bar</option><option value="card">Karte</option></select></div><button class="pay-btn" onclick="createWalkIn()">Ticket reservieren & bezahlen</button>
       </div>
 
       <!-- IMPRESSUM -->
@@ -357,12 +406,13 @@ async function loadAll(){
   const files = [
     'content/home.json','content/about.json','content/events.json',
     'content/contact_page.json','content/impressum.json',
-    'content/datenschutz.json','content/settings.json'
+    'content/datenschutz.json','content/settings.json','content/kiosk.json','content/reservations.json'
   ];
   for(const f of files) data[f] = await loadFile(f);
   events = [...(data['content/events.json']?.c?.events || [])];
   fillFields();
   renderEvents();
+  if (typeof initSales === 'function') initSales();
 }
 
 function fillFields(){
@@ -489,5 +539,6 @@ function toast(m, t=''){
 function b64e(s){ return btoa(unescape(encodeURIComponent(s))); }
 function b64d(s){ return decodeURIComponent(escape(atob(s.replace(/\n/g,'')))); }
 </script>
+<script src="kasse.js"></script>
 </body>
 </html>

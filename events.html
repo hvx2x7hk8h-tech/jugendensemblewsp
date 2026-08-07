@@ -623,19 +623,6 @@
  </div>
 </div>
 
-<!-- PAST SHOWS -->
-<div class="section-dark" id="past-section">
- <div class="section-inner">
- <div class="reveal" style="margin-bottom:2.5rem">
- <span class="section-label">Rückblick</span>
- <h2>Vergangene Vorstellungen</h2>
- <div class="divider"></div>
- </div>
- <div class="shows-grid reveal" id="shows-past"></div>
- </div>
-</div>
-
-
 <!-- FOOTER -->
 <footer>
  <div class="footer-inner">
@@ -779,7 +766,6 @@ let currentEvent = null, formspreeId = '', isWaitlist = false;
  const data = await loadJSON('/content/events.json');
  const allEvents = Array.isArray(data?.events) ? data.events : [];
  renderShows('shows-upcoming', allEvents.filter(e => !e.past));
- renderShows('shows-past', allEvents.filter(e => e.past));
 })();
 
 // RENDER 
@@ -924,6 +910,23 @@ async function submitReservation() {
  reservierungs_id: id,
  typ: isWaitlist ? 'Warteliste' : 'Reservierung',
  };
+
+ // Zentrale Liste für die Ticketkasse vor Ort
+ try {
+ const reservationResponse = await fetch('/.netlify/functions/reservations', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ id, name, email, quantity: qty, eventTitle: currentEvent.title,
+ eventDate: currentEvent.date || '', eventTime: currentEvent.time || '',
+ type: isWaitlist ? 'waitlist' : 'reservation'
+ })
+ });
+ if (!reservationResponse.ok) throw new Error('reservations service unavailable');
+ } catch (e) {
+ btn.disabled = false; btn.textContent = 'Jetzt reservieren →';
+ return showErr('Die Reservierung kann gerade nicht gespeichert werden. Bitte versuche es gleich noch einmal.');
+ }
 
  // Notify team via Formspree
  try {

@@ -1,0 +1,8 @@
+{
+  "products": [
+    { "id": "wasser", "name": "Wasser", "price": 2, "stock": 24 },
+    { "id": "cola", "name": "Cola", "price": 3, "stock": 24 },
+    { "id": "brezel", "name": "Brezel", "price": 2.5, "stock": 20 }
+  ],
+  "sales": []
+}
