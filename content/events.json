@@ -1,3 +1,18 @@
 {
-  "events": []
+  "events": [
+    {
+      "title": "hallo",
+      "date": "12.09.2026",
+      "time": "34",
+      "doors": "34",
+      "venue": "34",
+      "duration": "34",
+      "description": "",
+      "image": "",
+      "past": false,
+      "capacity": 80,
+      "reserved": 0,
+      "waitlist": true
+    }
+  ]
 }
