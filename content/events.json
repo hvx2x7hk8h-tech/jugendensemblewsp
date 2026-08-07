@@ -29,6 +29,20 @@
       "capacity": 80,
       "reserved": 0,
       "waitlist": true
+    },
+    {
+      "title": "Hallo",
+      "date": "12.09.2026",
+      "time": "23",
+      "doors": "32",
+      "venue": "12",
+      "duration": "23",
+      "description": "",
+      "image": "",
+      "past": false,
+      "capacity": 80,
+      "reserved": 0,
+      "waitlist": true
     }
   ]
 }
