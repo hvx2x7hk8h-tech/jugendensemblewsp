@@ -913,7 +913,7 @@ async function submitReservation() {
 
  // Zentrale Liste für die Ticketkasse vor Ort
  try {
- const reservationResponse = await fetch('/.netlify/functions/reservations', {
+ const reservationResponse = await fetch('/api/reservations', {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({
