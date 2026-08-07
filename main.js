@@ -76,9 +76,8 @@ async function renderEvents(containerId, showAll = false) {
         <div class="event-venue">${ev.venue}</div>
         ${ev.description ? `<p style="margin-top:0.5rem;font-size:0.85rem">${ev.description}</p>` : ''}
       </div>
-      <div>${ev.past ? '<span class="past-badge">Vergangen</span>' : ev.ticket_url ? `<a href="${ev.ticket_url}" target="_blank" rel="noopener" class="btn btn-primary">Tickets</a>` : '<span class="past-badge">Demnächst</span>'}</div>
+      <div>${ev.past ? '<span class="past-badge">Vergangen</span>' : '<a href="events.html" class="btn btn-primary">Tickets reservieren</a>'}</div>
     </div>
   `).join('');
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
-

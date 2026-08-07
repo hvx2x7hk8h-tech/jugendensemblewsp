@@ -177,21 +177,6 @@
  width: 100%;
  }
  .btn-waitlist:hover { border-color: var(--gold); color: var(--gold); }
- .btn-eventim {
- padding: .8rem 1.6rem;
- font-family: var(--font-display);
- font-size: .58rem;
- letter-spacing: .18em;
- text-transform: uppercase;
- background: #e2001a;
- color: #fff;
- border: none;
- cursor: pointer;
- transition: background .3s;
- white-space: nowrap;
- width: 100%;
- }
- .btn-eventim:hover { background: #ff2438; }
  .past-badge {
  font-family: var(--font-display);
  font-size: .5rem;
@@ -283,7 +268,7 @@
  font-weight: 300; display: flex; gap: 1rem; flex-wrap: wrap;
  }
 
- /* Ticket-mode badges (Reservierung vs. Eventim) */
+ /* Ticket-mode badge */
  .ticket-mode-badge {
  display: inline-block;
  font-family: var(--font-display);
@@ -295,57 +280,7 @@
  margin-bottom: .6rem;
  }
  .badge-custom { background: rgba(201,132,26,.12); color: var(--gold); }
- .badge-eventim { background: rgba(226,0,26,.12); color: #e2001a; }
 
- /* Eventim modal — full screen, same treatment as the reservation modal */
- #eventim-modal {
- position: fixed; inset: 0; z-index: 600;
- display: none;
- }
- #eventim-modal.open { display: flex; }
- .eventim-box {
- position: relative; z-index: 2;
- background: var(--surface);
- width: 100%; height: 100%;
- display: flex; flex-direction: column;
- overflow: hidden;
- }
- .eventim-head {
- padding: 1.4rem 2rem 1.2rem;
- border-bottom: 1px solid var(--border);
- display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
- flex-shrink: 0;
- max-width: 640px; margin: 0 auto; width: 100%; box-sizing: border-box;
- }
- .eventim-show-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--text); }
- .eventim-show-meta { font-size: .8rem; color: var(--text-muted); margin-top: .2rem; }
- .eventim-close {
- background: none; border: 1px solid var(--border); color: var(--text-muted);
- width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: .9rem;
- display: flex; align-items: center; justify-content: center; flex-shrink: 0;
- }
- .eventim-close:hover { border-color: var(--gold); color: var(--gold); }
- .eventim-frame-wrap { position: relative; flex: 1; overflow-y: auto; }
- #eventim-frame-host { width: 100%; }
- #eventim-frame-host iframe {
- width: 100%; min-height: 70vh; border: none; display: block; position: relative; z-index: 2; background: #fff;
- }
- .eventim-loading {
- position: absolute; inset: 0; z-index: 1;
- display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem;
- color: var(--text-muted); font-size: .8rem;
- }
- .eventim-loading .spinner {
- width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--gold);
- border-radius: 50%; animation: spin .8s linear infinite;
- }
- @keyframes spin { to { transform: rotate(360deg); } }
- .eventim-fallback {
- flex-shrink: 0; padding: .8rem 2rem; text-align: center; font-size: .75rem;
- color: var(--text-muted); border-top: 1px solid var(--border); background: var(--surface);
- }
- .eventim-fallback a { color: var(--gold); text-decoration: none; }
- .eventim-fallback a:hover { text-decoration: underline; }
 
  /* Steps content */
  .modal-body { flex: 1; overflow-y: auto; }
@@ -716,6 +651,7 @@
  <div class="footer-bottom">
  <span class="footer-copy">&copy; <span id="year"></span> Jugendensemble WSP — Alle Rechte vorbehalten.</span>
  <span class="footer-copy">Bonn, Deutschland </span>
+ <span class="footer-copy">Diese Website wurde mithilfe von KI erstellt.</span>
  </div>
 </footer>
 
@@ -815,35 +751,8 @@
  </div>
 </div>
 
-<!-- EVENTIM MODAL -->
-<div id="eventim-modal">
-  <div class="modal-bg" onclick="closeEventimModal()"></div>
-  <div class="eventim-box">
-    <div class="eventim-head">
-      <div>
-        <span class="ticket-mode-badge badge-eventim">Eventim Ticketshop</span>
-        <div class="eventim-show-title" id="eventim-title"></div>
-        <div class="eventim-show-meta" id="eventim-meta"></div>
-      </div>
-      <button class="eventim-close" type="button" onclick="closeEventimModal()" aria-label="Schließen">✕</button>
-    </div>
-    <div class="eventim-frame-wrap">
-      <div class="eventim-loading" id="eventim-loading">
-        <div class="spinner"></div>
-        <span>Ticketshop wird geladen …</span>
-      </div>
-      <div id="eventim-frame-host"></div>
-    </div>
-    <div class="eventim-fallback">
-      Lädt der Shop nicht? <a id="eventim-fallback-link" href="#" target="_blank" rel="noopener noreferrer">Hier direkt bei Eventim öffnen ↗</a>
-    </div>
-  </div>
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<!-- EVENTIM.Light Resize-Script — erkennt automatisch jedes iFrame mit id="eventim-light-iframe..." und passt die Höhe live an -->
-<script src="https://www.eventim-light.com/de/a/6a37d00fc56e7adfb0dbe632/public/iframe/el-shop.js"></script>
 <script src="main.js"></script>
 <script>
 // INIT 
@@ -886,8 +795,6 @@ function renderShows(id, events) {
 }
 
 function buildCard(ev) {
- const wantsEventim = ev.ticket_system === 'eventim';
- const isEventim = wantsEventim && !!ev.eventim_url; // Eventim ausgewählt UND Link vorhanden
  const evJSON = JSON.stringify(ev).replace(/'/g, '&#39;'); // verhindert kaputtes HTML bei Apostrophen in Titel/Beschreibung etc.
  const capacity = Number(ev.capacity) > 0 ? Number(ev.capacity) : 80; // Sicherheitsnetz falls im CMS leer gelassen
  const free = capacity - (ev.reserved || 0);
@@ -901,8 +808,7 @@ function buildCard(ev) {
  ? `<img class="show-poster" src="${ev.image}" alt="${ev.title}" loading="lazy">`
  : `<div class="show-poster-ph"></div>`;
 
- // Eventim verwaltet sein eigenes Kontingent — unsere Platzanzeige passt da nicht.
- const avail = (!ev.past && !wantsEventim) ? `
+ const avail = !ev.past ? `
  <div class="avail-wrap">
  <div class="avail-label"><span>${availTxt}</span><span>${ev.reserved||0}/${capacity}</span></div>
  <div class="avail-bar"><div class="avail-fill ${fillCls}" style="width:${pct}%"></div></div>
@@ -910,12 +816,6 @@ function buildCard(ev) {
 
  const cta = ev.past
  ? `<span class="past-badge">Vergangen</span>`
- // Eventim ausgewählt, aber Link fehlt im CMS — NICHT auf die kostenlose Reservierung zurückfallen
- // (sonst würden eigentlich kostenpflichtige Tickets als "Kostenlos reservierbar" erscheinen).
- : wantsEventim && !isEventim
- ? `<span class="past-badge">Tickets in Kürze</span>`
- : isEventim
- ? `<div class="show-price">Ticketverkauf</div><button class="btn-eventim" onclick='openEventimModal(${evJSON})'>Bei Eventim sichern ↗</button>`
  : sold && ev.waitlist
  ? `<div class="show-price">Ausgebucht</div><button class="btn-waitlist" onclick='openModal(${evJSON}, true)'>Warteliste</button>`
  : sold
@@ -976,54 +876,7 @@ function closeModal() {
  document.getElementById('modal').classList.remove('open');
  document.body.style.overflow = '';
 }
-let _eventimFrameCounter = 0;
-// Robust gegen beide Eingabe-Varianten im CMS-Feld "Eventim-Link":
-// entweder die reine URL, ODER der komplette Embed-Code-Schnipsel (<div><iframe src="...">...).
-// Zieht in jedem Fall zuverlässig die eigentliche src-URL heraus.
-function extractEventimSrc(raw) {
- if (!raw) return '';
- const trimmed = String(raw).trim();
- if (!trimmed.includes('<')) return trimmed; // sieht schon nach einer reinen URL aus
- const match = trimmed.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);
- return match ? match[1] : trimmed;
-}
-
-function openEventimModal(ev) {
- if (!ev || !ev.eventim_url) return; // Sicherheitsnetz — sollte durch buildCard() nie passieren
- const src = extractEventimSrc(ev.eventim_url);
- if (!src) return;
- document.getElementById('eventim-title').textContent = ev.title;
- document.getElementById('eventim-meta').textContent = [ev.date, ev.time, ev.venue].filter(Boolean).join(' · ');
- document.getElementById('eventim-fallback-link').href = src;
- document.getElementById('eventim-loading').style.display = 'flex';
-
- // Frisches iFrame pro Öffnung — die ID muss mit "eventim-light-iframe" beginnen,
- // damit das offizielle EVENTIM.Light-Resize-Script (el-shop.js) es automatisch erkennt
- // und die Höhe live an den Inhalt anpasst.
- // scrolling="auto" (statt "no") ist bewusst die Rückfallebene: Falls das Resize-Script aus
- // irgendeinem Grund nicht lädt (CDN-Ausfall, Adblocker), bekommt das iFrame trotzdem eine
- // eigene Scrollbar und bleibt benutzbar. Sobald das Script erfolgreich eine Höhe meldet,
- // schaltet es selbst auf overflow:hidden um — dann verschwindet die iFrame-Scrollbar automatisch.
- const elId = `eventim-light-iframe-modal-${_eventimFrameCounter++}`;
- const host = document.getElementById('eventim-frame-host');
- host.innerHTML = `<iframe id="${elId}" name="${elId}" src="${src}" width="100%" data-scroll="false" scrolling="auto" frameborder="0"></iframe>`;
- const loadingEl = document.getElementById('eventim-loading');
- document.getElementById(elId).addEventListener('load', () => { loadingEl.style.display = 'none'; });
- // Sicherheitsnetz: Spinner spätestens nach 8s ausblenden, falls das load-Event aus irgendeinem
- // Grund nie feuert — der Fallback-Link unten bleibt ohnehin die ganze Zeit sichtbar.
- setTimeout(() => { loadingEl.style.display = 'none'; }, 8000);
-
- document.getElementById('eventim-modal').classList.add('open');
- document.body.style.overflow = 'hidden';
-}
-function closeEventimModal() {
- const m = document.getElementById('eventim-modal');
- if (!m) return;
- m.classList.remove('open');
- document.body.style.overflow = '';
- document.getElementById('eventim-frame-host').innerHTML = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEventimModal(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 // STEPS 
 function goStep(n, animate = true) {
