@@ -28,10 +28,15 @@ async function github(context, path, options = {}) {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.github+json',
+      'User-Agent': 'Jugendensemble-WSP-Ticketkasse',
+      'X-GitHub-Api-Version': '2022-11-28',
       ...(options.headers || {})
     }
   });
-  if (!response.ok) throw new Error(`GitHub request failed (${response.status})`);
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`GitHub request failed (${response.status}): ${detail}`);
+  }
   return response.json();
 }
 

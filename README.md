@@ -6,4 +6,3 @@ Damit Online-Reservierungen in der Admin-Ticketkasse erscheinen, in Cloudflare P
 `Settings → Variables and Secrets` die geheime Variable `GITHUB_TOKEN` hinterlegen.
 Der Token benötigt für dieses Repository Lese- und Schreibrechte auf Inhalte. Anschließend
 neu deployen. Die Daten liegen in `content/reservations.json` und `content/kiosk.json`.
-Hi!
