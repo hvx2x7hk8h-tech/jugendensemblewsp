@@ -4,13 +4,13 @@
       "id": "wasser",
       "name": "Wasser",
       "price": 2,
-      "stock": 24
+      "stock": 23
     },
     {
       "id": "cola",
       "name": "Cola",
       "price": 3,
-      "stock": 23
+      "stock": 22
     },
     {
       "id": "brezel",
@@ -20,6 +20,27 @@
     }
   ],
   "sales": [
+    {
+      "id": "POS-1786188965389",
+      "eventTitle": "Känguru Kroniken",
+      "items": [
+        {
+          "id": "wasser",
+          "name": "Wasser",
+          "price": 2,
+          "quantity": 1
+        },
+        {
+          "id": "cola",
+          "name": "Cola",
+          "price": 3,
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cash",
+      "total": 5,
+      "createdAt": "2026-08-08T11:36:05.390Z"
+    },
     {
       "id": "POS-1786188956949",
       "eventTitle": "Känguru Kroniken",
