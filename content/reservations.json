@@ -11,9 +11,10 @@
       "type": "reservation",
       "paymentStatus": "paid",
       "paymentMethod": "cash",
-      "checkedIn": false,
+      "checkedIn": true,
       "createdAt": "2026-08-08T11:32:42.293Z",
-      "paidAt": "2026-08-08T11:34:28.195Z"
+      "paidAt": "2026-08-08T11:34:28.195Z",
+      "checkedInAt": "2026-08-08T11:34:48.100Z"
     }
   ]
 }
