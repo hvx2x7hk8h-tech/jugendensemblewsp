@@ -1,3 +1,17 @@
 {
-  "reservations": []
+  "reservations": [
+    {
+      "id": "WSP-VORORT-1787225579564",
+      "name": "Jakob Winter",
+      "email": "",
+      "eventTitle": "Känguru Kroniken",
+      "quantity": 4,
+      "type": "walkin",
+      "paymentStatus": "paid",
+      "paymentMethod": "sumup_manual",
+      "checkedIn": true,
+      "createdAt": "2026-08-20T11:32:59.564Z",
+      "paidAt": "2026-08-20T11:32:59.564Z"
+    }
+  ]
 }
