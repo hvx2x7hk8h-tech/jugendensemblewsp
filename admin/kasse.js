@@ -4,7 +4,19 @@ let cart = [];
 
 const money = (value) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(Number(value || 0));
 const escHtml = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[char]);
-const paymentLabel = (method) => method === 'card' ? 'Karte' : 'Bar';
+const paymentLabel = (method) => method === 'sumup_manual' ? 'SumUp (manuell bestätigt)' : 'Bar';
+
+function confirmSumUpPayment(amount = null) {
+  const amountText = Number.isFinite(amount) && amount > 0
+    ? `SumUp-Zahlung: ${money(amount)}`
+    : 'SumUp-Zahlung: Betrag bitte direkt in der SumUp-App oder am Terminal eingeben.';
+  return window.confirm(
+    `${amountText}\n\n` +
+    'Bitte führe die Kartenzahlung jetzt in der SumUp-App oder am SumUp-Terminal durch.\n\n' +
+    'Klicke nur auf „OK“, wenn SumUp die Zahlung als erfolgreich angezeigt hat.\n' +
+    'Bei Abbruch oder Fehler klicke auf „Abbrechen“. '
+  );
+}
 
 function initSales() {
   kiosk = data['content/kiosk.json']?.c || { products: [], sales: [] };
@@ -58,8 +70,11 @@ async function finishSale() {
     const product = kiosk.products.find((entry) => entry.id === item.id);
     if (!product || (product.stock !== '' && Number(product.stock) < item.quantity)) return toast(`${item.name} ist nicht ausreichend vorrätig.`, 'err');
   }
+  const paymentMethod = document.getElementById('pos-payment').value;
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  if (paymentMethod === 'sumup_manual' && !confirmSumUpPayment(total)) return toast('SumUp-Zahlung nicht als Verkauf gespeichert.', 'err');
   cart.forEach((item) => { const product = kiosk.products.find((entry) => entry.id === item.id); if (product.stock !== '') product.stock = Number(product.stock) - item.quantity; });
-  kiosk.sales.unshift({ id: `POS-${Date.now()}`, eventTitle: document.getElementById('pos-event').value, items: cart, paymentMethod: document.getElementById('pos-payment').value, total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0), createdAt: new Date().toISOString() });
+  kiosk.sales.unshift({ id: `POS-${Date.now()}`, eventTitle: document.getElementById('pos-event').value, items: cart, paymentMethod, total, createdAt: new Date().toISOString() });
   if (!(await saveRemote('content/kiosk.json', kiosk, 'Kassenverkauf speichern'))) return toast('Verkauf konnte nicht gespeichert werden.', 'err');
   clearCart(); renderProductEditor(); renderSales(); toast('Verkauf gespeichert.', 'ok');
 }
@@ -81,19 +96,26 @@ function renderReservations() {
   const list = document.getElementById('reservations-list'); if (!list) return;
   const query = (document.getElementById('reservation-search')?.value || '').toLowerCase();
   const rows = reservations.filter((reservation) => [reservation.name, reservation.email, reservation.id, reservation.eventTitle].join(' ').toLowerCase().includes(query));
-  list.innerHTML = rows.map((reservation) => `<tr><td><strong>${escHtml(reservation.name)}</strong><br>${escHtml(reservation.email || '')}<br><small>${escHtml(reservation.id)}</small></td><td>${escHtml(reservation.eventTitle)}<br><small>${escHtml(reservation.eventDate || '')}</small></td><td>${reservation.quantity}</td><td><span class="status ${reservation.paymentStatus === 'paid' ? 'paid' : 'open'}">${reservation.paymentStatus === 'paid' ? `Bezahlt (${paymentLabel(reservation.paymentMethod)})` : 'Offen'}</span>${reservation.checkedIn ? '<br><span class="status paid">Eingelassen</span>' : ''}</td><td>${reservation.paymentStatus !== 'paid' ? `<button class="mini-btn" onclick="payReservation('${escHtml(reservation.id)}','cash')">Bar bezahlen</button> <button class="mini-btn" onclick="payReservation('${escHtml(reservation.id)}','card')">Karte bezahlen</button>` : ''} ${!reservation.checkedIn ? `<button class="mini-btn" onclick="checkInReservation('${escHtml(reservation.id)}')">Einlassen</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="5">Keine Reservierungen gefunden.</td></tr>';
+  list.innerHTML = rows.map((reservation) => `<tr><td><strong>${escHtml(reservation.name)}</strong><br>${escHtml(reservation.email || '')}<br><small>${escHtml(reservation.id)}</small></td><td>${escHtml(reservation.eventTitle)}<br><small>${escHtml(reservation.eventDate || '')}</small></td><td>${reservation.quantity}</td><td><span class="status ${reservation.paymentStatus === 'paid' ? 'paid' : 'open'}">${reservation.paymentStatus === 'paid' ? `Bezahlt (${paymentLabel(reservation.paymentMethod)})` : 'Offen'}</span>${reservation.checkedIn ? '<br><span class="status paid">Eingelassen</span>' : ''}</td><td>${reservation.paymentStatus !== 'paid' ? `<button class="mini-btn" onclick="payReservation('${escHtml(reservation.id)}','cash')">Bar bezahlen</button> <button class="mini-btn" onclick="payReservation('${escHtml(reservation.id)}','sumup_manual')">SumUp bestätigen</button>` : ''} ${!reservation.checkedIn ? `<button class="mini-btn" onclick="checkInReservation('${escHtml(reservation.id)}')">Einlassen</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="5">Keine Reservierungen gefunden.</td></tr>';
 }
 
 async function saveReservations() {
   if (await saveRemote('content/reservations.json', { reservations }, 'Ticketstatus aktualisieren')) { renderReservations(); toast('Ticketstatus gespeichert.', 'ok'); }
   else toast('Ticketstatus konnte nicht gespeichert werden.', 'err');
 }
-function payReservation(id, method) { const reservation = reservations.find((entry) => entry.id === id); if (!reservation) return; reservation.paymentStatus = 'paid'; reservation.paymentMethod = method; reservation.paidAt = new Date().toISOString(); saveReservations(); }
+function payReservation(id, method) {
+  const reservation = reservations.find((entry) => entry.id === id);
+  if (!reservation) return;
+  if (method === 'sumup_manual' && !confirmSumUpPayment()) return toast('SumUp-Zahlung nicht als bezahlt gespeichert.', 'err');
+  reservation.paymentStatus = 'paid'; reservation.paymentMethod = method; reservation.paidAt = new Date().toISOString(); saveReservations();
+}
 function checkInReservation(id) { const reservation = reservations.find((entry) => entry.id === id); if (!reservation) return; reservation.checkedIn = true; reservation.checkedInAt = new Date().toISOString(); saveReservations(); }
 
 function createWalkIn() {
   const name = document.getElementById('walkin-name').value.trim(); const eventTitle = document.getElementById('walkin-event').value; const quantity = Number(document.getElementById('walkin-qty').value);
   if (!name || !eventTitle || !Number.isInteger(quantity) || quantity < 1) return toast('Bitte Name, Vorstellung und Anzahl angeben.', 'err');
-  reservations.unshift({ id: `WSP-VORORT-${Date.now()}`, name, email: document.getElementById('walkin-email').value.trim(), eventTitle, quantity, type: 'walkin', paymentStatus: 'paid', paymentMethod: document.getElementById('walkin-payment').value, checkedIn: true, createdAt: new Date().toISOString(), paidAt: new Date().toISOString() });
+  const paymentMethod = document.getElementById('walkin-payment').value;
+  if (paymentMethod === 'sumup_manual' && !confirmSumUpPayment()) return toast('SumUp-Zahlung nicht als Ticket gespeichert.', 'err');
+  reservations.unshift({ id: `WSP-VORORT-${Date.now()}`, name, email: document.getElementById('walkin-email').value.trim(), eventTitle, quantity, type: 'walkin', paymentStatus: 'paid', paymentMethod, checkedIn: true, createdAt: new Date().toISOString(), paidAt: new Date().toISOString() });
   saveReservations(); document.getElementById('walkin-name').value = ''; document.getElementById('walkin-email').value = ''; document.getElementById('walkin-qty').value = 1;
 }

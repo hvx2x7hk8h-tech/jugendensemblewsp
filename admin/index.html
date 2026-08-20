@@ -273,7 +273,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tex
         <div class="field"><label>Vorstellung</label><select id="pos-event" onchange="renderPos()"></select></div>
         <div class="pos-grid">
           <div class="pos-card"><h3>Produkte</h3><div class="product-grid" id="product-grid"></div></div>
-          <div class="pos-card"><h3>Warenkorb</h3><div id="cart-list"></div><div class="pos-total" id="cart-total">0,00 €</div><div class="field"><label>Zahlungsart</label><select id="pos-payment"><option value="cash">Bar</option><option value="card">Karte</option></select></div><div class="pos-actions"><button class="pay-btn" onclick="finishSale()">Verkauf abschließen</button><button class="pay-btn secondary" onclick="clearCart()">Leeren</button></div></div>
+          <div class="pos-card"><h3>Warenkorb</h3><div id="cart-list"></div><div class="pos-total" id="cart-total">0,00 €</div><div class="field"><label>Zahlungsart</label><select id="pos-payment"><option value="cash">Bar</option><option value="sumup_manual">SumUp Karte (manuell bestätigen)</option></select><div class="hint">Bis SumUp verbunden ist, Zahlung am SumUp-Gerät durchführen und erst danach bestätigen.</div></div><div class="pos-actions"><button class="pay-btn" onclick="finishSale()">Verkauf abschließen</button><button class="pay-btn secondary" onclick="clearCart()">Leeren</button></div></div>
         </div>
         <div class="divider"></div>
         <div class="sec-title">Produkte & Bestand</div>
@@ -291,7 +291,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tex
         <div class="divider"></div><div class="sec-title">Vor-Ort-Ticket</div>
         <div class="field-row"><div class="field"><label>Name</label><input id="walkin-name" placeholder="Name des Gastes"></div><div class="field"><label>E-Mail (optional)</label><input id="walkin-email" type="email"></div></div>
         <div class="field-row"><div class="field"><label>Vorstellung</label><select id="walkin-event"></select></div><div class="field"><label>Anzahl</label><input id="walkin-qty" type="number" min="1" value="1"></div></div>
-        <div class="field"><label>Zahlungsart</label><select id="walkin-payment"><option value="cash">Bar</option><option value="card">Karte</option></select></div><button class="pay-btn" onclick="createWalkIn()">Ticket reservieren & bezahlen</button>
+        <div class="field"><label>Zahlungsart</label><select id="walkin-payment"><option value="cash">Bar</option><option value="sumup_manual">SumUp Karte (manuell bestätigen)</option></select></div><button class="pay-btn" onclick="createWalkIn()">Ticket reservieren & bezahlen</button>
       </div>
 
       <!-- IMPRESSUM -->
