@@ -1,3 +1,19 @@
 {
-  "reservations": []
+  "reservations": [
+    {
+      "id": "WSP-U9NR5FW6",
+      "name": "Jakob Evers",
+      "email": "jakob.p.evers@gmail.com",
+      "quantity": 2,
+      "eventTitle": "Känguru Kroniken",
+      "eventDate": "Sa. 18.07.2026",
+      "eventTime": "20:00 Uhr",
+      "type": "reservation",
+      "ticketPrice": 0,
+      "paymentStatus": "open",
+      "paymentMethod": null,
+      "checkedIn": false,
+      "createdAt": "2026-08-21T11:14:21.096Z"
+    }
+  ]
 }
