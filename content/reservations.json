@@ -12,9 +12,10 @@
       "ticketPrice": 0,
       "paymentStatus": "paid",
       "paymentMethod": "sumup_manual",
-      "checkedIn": false,
+      "checkedIn": true,
       "createdAt": "2026-08-21T11:14:21.096Z",
-      "paidAt": "2026-08-21T11:19:42.951Z"
+      "paidAt": "2026-08-21T11:19:42.951Z",
+      "checkedInAt": "2026-08-21T11:21:16.157Z"
     }
   ]
 }
