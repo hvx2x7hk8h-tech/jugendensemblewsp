@@ -271,6 +271,14 @@ input, textarea {
 input:focus, textarea:focus { border-color: var(--gold); }
 textarea { resize: vertical; min-height: 130px; }
 
+/* GALERIE */
+.gallery-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; }
+.gallery-grid img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px; border:2px solid var(--border); }
+
+/* ACCESSIBILITY */
+:focus-visible { outline:3px solid #8a5200; outline-offset:3px; }
+.btn, .hamburger, button, input, textarea, select { min-height:44px; }
+
 /* ── LEGAL ── */
 .legal-content { max-width: 780px; }
 .legal-content h2 { font-size: 1.4rem; margin-top: 2.5rem; margin-bottom: 0.8rem; }
@@ -312,10 +320,12 @@ footer { background: var(--surface); border-top: 2px solid var(--border); paddin
   .form-group.full { grid-column: span 1; }
   .event-card { grid-template-columns: 60px 1fr; }
   .event-card > .btn { grid-column: span 2; }
+  .gallery-grid { grid-template-columns:repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
   .hero h1 { font-size: 2.5rem; }
   .hero-actions { flex-direction: column; align-items: center; }
   .event-card { grid-template-columns: 1fr; }
   .event-img { width: 100%; height: 160px; }
+  .gallery-grid { grid-template-columns:1fr; }
 }

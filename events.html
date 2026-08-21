@@ -806,7 +806,7 @@ function buildCard(ev) {
  ? `<div class="show-price">Ausgebucht</div><button class="btn-waitlist" onclick='openModal(${evJSON}, true)'>Warteliste</button>`
  : sold
  ? `<span class="past-badge">Ausgebucht</span>`
- : `<div class="show-price">Kostenlos</div><button class="btn-book" onclick='openModal(${evJSON}, false)'>Ticket reservieren</button>`;
+ : `<div class="show-price">${Number(ev.ticket_price || 0) > 0 ? `${Number(ev.ticket_price).toFixed(2).replace('.', ',')} € · Zahlung vor Ort` : 'Kostenlos'}</div><button class="btn-book" onclick='openModal(${evJSON}, false)'>Ticket reservieren</button>`;
 
  return `
  <div class="show-card${ev.past?' past':''} reveal">
@@ -835,7 +835,7 @@ function openModal(ev, waitlist) {
  const free = capacity - (ev.reserved || 0);
 
  document.getElementById('m-title').textContent = ev.title;
- document.getElementById('m-badge').textContent = waitlist ? 'Warteliste' : 'Kostenlose Reservierung';
+ document.getElementById('m-badge').textContent = waitlist ? 'Warteliste' : (Number(ev.ticket_price || 0) > 0 ? 'Reservierung · Zahlung vor Ort' : 'Kostenlose Reservierung');
  document.getElementById('m-meta').innerHTML = [
  ev.date ? `<span> ${ev.date}</span>` : '',
  ev.time ? `<span> ${ev.time}</span>` : '',
@@ -907,6 +907,7 @@ async function submitReservation() {
  einlass: currentEvent.doors || '—',
  ort: currentEvent.venue || '—',
  anzahl: qty + (qty === '1' ? ' Ticket' : ' Tickets'),
+ ticketpreis: Number(currentEvent.ticket_price || 0).toFixed(2).replace('.', ',') + ' €',
  reservierungs_id: id,
  typ: isWaitlist ? 'Warteliste' : 'Reservierung',
  };
@@ -919,7 +920,7 @@ async function submitReservation() {
  body: JSON.stringify({
  id, name, email, quantity: qty, eventTitle: currentEvent.title,
  eventDate: currentEvent.date || '', eventTime: currentEvent.time || '',
- type: isWaitlist ? 'waitlist' : 'reservation'
+ type: isWaitlist ? 'waitlist' : 'reservation', ticketPrice: Number(currentEvent.ticket_price || 0)
  })
  });
  if (!reservationResponse.ok) throw new Error('reservations service unavailable');

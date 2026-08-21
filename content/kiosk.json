@@ -1,45 +1,8 @@
 {
   "products": [
-    {
-      "id": "wasser",
-      "name": "Wasser",
-      "price": 2,
-      "stock": 23
-    },
-    {
-      "id": "cola",
-      "name": "Cola",
-      "price": 3,
-      "stock": 23
-    },
-    {
-      "id": "brezel",
-      "name": "Brezel",
-      "price": 2.5,
-      "stock": 20
-    }
+    { "id": "wasser", "name": "Wasser", "category": "Getränke", "price": 2, "stock": 24 },
+    { "id": "cola", "name": "Cola", "category": "Getränke", "price": 3, "stock": 24 },
+    { "id": "brezel", "name": "Brezel", "category": "Snacks", "price": 2.5, "stock": 20 }
   ],
-  "sales": [
-    {
-      "id": "POS-1787225555918",
-      "eventTitle": "Känguru Kroniken",
-      "items": [
-        {
-          "id": "wasser",
-          "name": "Wasser",
-          "price": 2,
-          "quantity": 1
-        },
-        {
-          "id": "cola",
-          "name": "Cola",
-          "price": 3,
-          "quantity": 1
-        }
-      ],
-      "paymentMethod": "sumup_manual",
-      "total": 5,
-      "createdAt": "2026-08-20T11:32:35.918Z"
-    }
-  ]
+  "sales": []
 }

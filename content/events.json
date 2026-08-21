@@ -11,6 +11,7 @@
       "duration": "ca. 90 Minuten",
       "description": "Ein anarchistisches Känguru zieht zu Marc-Uwe – und das Leben wird nie wieder dasselbe. Humor, Herz und jede Menge Chaos.",
       "capacity": 80,
+      "ticket_price": 0,
       "reserved": 67,
       "image": "https://static.wixstatic.com/media/511c42_03e54940eec948628346631343499d5f~mv2.png",
       "waitlist": true,
@@ -27,6 +28,7 @@
       "image": "",
       "past": false,
       "capacity": 80,
+      "ticket_price": 0,
       "reserved": 0,
       "waitlist": true
     }

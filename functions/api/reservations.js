@@ -1,5 +1,6 @@
 const REPO = 'hvx2x7hk8h-tech/jugendensemblewsp';
 const FILE = 'content/reservations.json';
+const EVENTS_FILE = 'content/events.json';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -51,15 +52,40 @@ export async function onRequestPost(context) {
     if (!required.every((key) => reservation[key])) throw new Error('Missing reservation data');
 
     const current = await github(context, FILE);
+    const eventsFile = await github(context, EVENTS_FILE);
     const store = JSON.parse(decodeBase64(current.content));
+    const eventsStore = JSON.parse(decodeBase64(eventsFile.content));
     store.reservations = Array.isArray(store.reservations) ? store.reservations : [];
+    eventsStore.events = Array.isArray(eventsStore.events) ? eventsStore.events : [];
+    const show = eventsStore.events.find((item) => item.title === reservation.eventTitle && !item.past);
+    if (!show) throw new Error('Event not found');
+    const quantity = Number(reservation.quantity);
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 6) throw new Error('Invalid ticket quantity');
+    const capacity = Number(show.capacity) || 80;
+    const free = Math.max(0, capacity - (Number(show.reserved) || 0));
+    const type = quantity <= free ? 'reservation' : (show.waitlist ? 'waitlist' : null);
+    if (!type) throw new Error('No seats available');
+
     store.reservations.push({
       ...reservation,
-      quantity: Number(reservation.quantity),
+      type,
+      quantity,
+      ticketPrice: Number(show.ticket_price || 0),
       paymentStatus: 'open',
       paymentMethod: null,
       checkedIn: false,
       createdAt: new Date().toISOString()
+    });
+    if (type === 'reservation') show.reserved = (Number(show.reserved) || 0) + quantity;
+
+    await github(context, EVENTS_FILE, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `Plätze aktualisieren: ${show.title}`,
+        content: encodeBase64(JSON.stringify(eventsStore, null, 2)),
+        sha: eventsFile.sha
+      })
     });
 
     await github(context, FILE, {
@@ -71,7 +97,7 @@ export async function onRequestPost(context) {
         sha: current.sha
       })
     });
-    return Response.json({ ok: true }, { status: 201, headers });
+    return Response.json({ ok: true, type, ticketPrice: Number(show.ticket_price || 0) }, { status: 201, headers });
   } catch (error) {
     console.error(error);
     return Response.json({ error: 'Reservierung konnte nicht gespeichert werden.' }, { status: 500, headers });

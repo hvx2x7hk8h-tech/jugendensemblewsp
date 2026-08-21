@@ -100,6 +100,14 @@
   </blockquote>
 </div>
 
+<!-- GALERIE -->
+<div class="section" aria-labelledby="gallery-heading">
+  <span class="section-label">Einblicke</span>
+  <h2 id="gallery-heading">Proben & Aufführungen</h2>
+  <div class="divider"></div>
+  <div class="gallery-grid reveal" id="gallery-grid"></div>
+</div>
+
 <!-- CTA BANNER -->
 <div class="cta-banner">
   <h2>Lust auf Theater?</h2>
@@ -142,6 +150,9 @@
       if (home.quote)        document.getElementById('home-quote').textContent    = '\u201E' + home.quote + '\u201C';
     }
     renderEvents('events-home', false);
+    const gallery = await loadJSON('/content/gallery.json');
+    const grid = document.getElementById('gallery-grid');
+    if (grid && Array.isArray(gallery?.items)) grid.innerHTML = gallery.items.filter(item => item.image).map(item => `<img src="${item.image}" alt="${item.alt || 'Jugendensemble WSP bei Probe oder Aufführung'}" loading="lazy">`).join('');
   })();
 </script>
 </body>
