@@ -28,7 +28,7 @@
       "image": "",
       "past": false,
       "capacity": 80,
-      "ticket_price": 0,
+      "ticket_price": 15.11,
       "reserved": 2,
       "waitlist": true
     }
