@@ -29,7 +29,7 @@
       "past": false,
       "capacity": 80,
       "ticket_price": 0,
-      "reserved": 0,
+      "reserved": 2,
       "waitlist": true
     }
   ]
