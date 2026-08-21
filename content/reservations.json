@@ -10,10 +10,11 @@
       "eventTime": "20:00 Uhr",
       "type": "reservation",
       "ticketPrice": 0,
-      "paymentStatus": "open",
-      "paymentMethod": null,
+      "paymentStatus": "paid",
+      "paymentMethod": "sumup_manual",
       "checkedIn": false,
-      "createdAt": "2026-08-21T11:14:21.096Z"
+      "createdAt": "2026-08-21T11:14:21.096Z",
+      "paidAt": "2026-08-21T11:18:36.716Z"
     }
   ]
 }
