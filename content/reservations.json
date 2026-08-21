@@ -22,10 +22,11 @@
       "eventDate": "Sa. 18.07.2026",
       "eventTime": "20:00 Uhr",
       "type": "reservation",
-      "paymentStatus": "open",
-      "paymentMethod": null,
+      "paymentStatus": "paid",
+      "paymentMethod": "cash",
       "checkedIn": false,
-      "createdAt": "2026-08-21T10:54:37.754Z"
+      "createdAt": "2026-08-21T10:54:37.754Z",
+      "paidAt": "2026-08-21T10:57:04.480Z"
     }
   ]
 }
